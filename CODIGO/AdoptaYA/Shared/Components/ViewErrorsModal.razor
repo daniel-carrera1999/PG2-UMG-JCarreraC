@@ -1,0 +1,15 @@
+﻿@inject DialogService DialogService
+
+<pre style="font-family: Helvetica, Arial;
+			color: var(--bs-body-color);
+			font-size: var(--bs-body-font-size);
+			font-weight: var(--bs-body-font-weight);
+			letter-spacing: var(--rz-dialog-title-letter-spacing);
+			line-height: var(--bs-body-line-height);
+			margin-block-end: 1.5rem;">
+    @strErrores
+</pre>
+
+<div class="rz-dialog-alert-buttons">
+    <RadzenButton Text="Aceptar" ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Button" Click="@((args) => DialogService.Close(true))" />
+</div>

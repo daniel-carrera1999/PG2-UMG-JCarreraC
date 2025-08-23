@@ -1,0 +1,28 @@
+﻿<style>
+    .container-loader {
+        position: absolute;
+        left: -6px;
+        bottom: 6px;
+        width: 100%;
+        height: 90%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+    }
+</style>
+
+@if (Loading)
+{
+    <div class="container-loader">
+        <div class="rz-w-100 rz-display-flex rz-justify-content-center rz-align-items-center">
+            <div class="envelope-loader">
+                <div class="envelope-loader-lines"></div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public bool Loading { get; set; } = false;
+}

@@ -1,281 +1,301 @@
--- MySQL Workbench Forward Engineering
+-- MySQL Workbench Forward Engineering (corregido)
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema adopciones
+-- Schema adoptaya
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `adopciones` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
-USE `adopciones` ;
+CREATE SCHEMA IF NOT EXISTS `adoptaya` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE `adoptaya`;
+
+-- Eliminar todas las tablas del esquema adoptaya
+USE `adoptaya`;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS;
+SET FOREIGN_KEY_CHECKS=0;
+
+DROP TABLE IF EXISTS `medicina`;
+DROP TABLE IF EXISTS `enfermedad`;
+DROP TABLE IF EXISTS `comportamiento`;
+DROP TABLE IF EXISTS `vacuna`;
+DROP TABLE IF EXISTS `referencia_personal`;
+DROP TABLE IF EXISTS `retorno`;
+DROP TABLE IF EXISTS `seguimiento`;
+DROP TABLE IF EXISTS `bitacora`;
+DROP TABLE IF EXISTS `adopcion`;
+DROP TABLE IF EXISTS `rol_usuario`;
+DROP TABLE IF EXISTS `permiso`;
+DROP TABLE IF EXISTS `modulo`;
+DROP TABLE IF EXISTS `rol`;
+DROP TABLE IF EXISTS `mascota`;
+DROP TABLE IF EXISTS `animal`;
+DROP TABLE IF EXISTS `solicitante`;
+DROP TABLE IF EXISTS `usuario`;
+
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 
 -- -----------------------------------------------------
 -- Table `solicitante`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `solicitante` (
-  `id` INT NOT NULL,
-  `nombres` VARCHAR(90) NULL,
-  `apellidos` VARCHAR(90) NULL,
-  `fecha_nacimiento` DATE NULL,
-  `celular` VARCHAR(75) NULL,
-  `telefono_casa` VARCHAR(75) NULL,
-  `correo` VARCHAR(120) NULL,
-  `direccion` VARCHAR(200) NULL,
-  `ingresos` DOUBLE NULL,
-  `estado_civil` VARCHAR(45) NULL,
-  `ocupacion` VARCHAR(100) NULL,
-  `date` TIMESTAMP NULL,
-  `inactive` TINYINT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nombres` VARCHAR(90),
+  `apellidos` VARCHAR(90),
+  `fecha_nacimiento` DATE,
+  `celular` VARCHAR(75),
+  `telefono_casa` VARCHAR(75),
+  `correo` VARCHAR(120),
+  `direccion` VARCHAR(200),
+  `ingresos` DOUBLE,
+  `estado_civil` VARCHAR(45),
+  `ocupacion` VARCHAR(100),
+  `date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `inactive` TINYINT(1) DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB;
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `animal`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `animal` (
-  `id` INT NOT NULL,
-  `especie` VARCHAR(45) NULL,
-  `raza` VARCHAR(45) NULL,
-  `date` TIMESTAMP NULL,
-  `inactive` TINYINT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `especie` VARCHAR(45),
+  `raza` VARCHAR(45),
+  `date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `inactive` TINYINT(1) DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB;
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `mascota`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mascota` (
-  `id` INT NOT NULL,
-  `nombre_mascota` VARCHAR(150) NULL,
-  `tamanio` VARCHAR(45) NULL,
-  `peso` DOUBLE NULL,
-  `color` VARCHAR(45) NULL,
-  `date` TIMESTAMP NULL,
-  `inactive` TINYINT NULL,
-  `id_animal` INT NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nombre_mascota` VARCHAR(150),
+  `tamanio` VARCHAR(45),
+  `peso` DOUBLE,
+  `color` VARCHAR(45),
+  `date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `inactive` TINYINT(1) DEFAULT 0,
+  `id_animal` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_mascota_animal1_idx` (`id_animal`),
   CONSTRAINT `fk_mascota_animal1`
     FOREIGN KEY (`id_animal`)
     REFERENCES `animal` (`id`)
-) ENGINE = InnoDB;
+    ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `usuario`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `usuario` (
-  `id` INT NOT NULL,
-  `username` VARCHAR(25) NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(25),
   `correo` VARCHAR(100) NOT NULL,
-  `password` VARCHAR(45) NOT NULL,
-  `nombre` VARCHAR(100) NULL,
-  `apellido` VARCHAR(100) NULL,
+  `password` VARCHAR(100) NOT NULL,
+  `nombre` VARCHAR(100),
+  `apellido` VARCHAR(100),
   `date` DATETIME NULL,
-  `inactive` TINYINT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE = InnoDB;
+  `inactive` TINYINT(1) DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ux_usuario_correo` (`correo`)
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `adopcion`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `adopcion` (
-  `id` INT NOT NULL,
-  `fecha_adopcion` DATE NULL,
-  `no_doc` INT NULL,
-  `adjunto` VARCHAR(1000) NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `fecha_adopcion` DATE,
+  `no_doc` INT,
+  `adjunto` VARCHAR(1000),
   `date` DATETIME NULL,
-  `status` TINYINT NULL,
-  `id_solicitante` INT NOT NULL,
-  `id_mascota` INT NOT NULL,
-  `id_usuario` INT NOT NULL,
+  `status` TINYINT(1),
+  `id_solicitante` INT UNSIGNED NOT NULL,
+  `id_mascota` INT UNSIGNED NOT NULL,
+  `id_usuario` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_adopcion_solicitante1` FOREIGN KEY (`id_solicitante`) REFERENCES `solicitante` (`id`),
-  CONSTRAINT `fk_adopcion_mascota1` FOREIGN KEY (`id_mascota`) REFERENCES `mascota` (`id`),
-  CONSTRAINT `fk_adopcion_usuario1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`)
-) ENGINE = InnoDB;
+  INDEX `fk_adopcion_solicitante1_idx` (`id_solicitante`),
+  INDEX `fk_adopcion_mascota1_idx` (`id_mascota`),
+  INDEX `fk_adopcion_usuario1_idx` (`id_usuario`),
+  CONSTRAINT `fk_adopcion_solicitante1` FOREIGN KEY (`id_solicitante`) REFERENCES `solicitante` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_adopcion_mascota1`      FOREIGN KEY (`id_mascota`)     REFERENCES `mascota` (`id`)     ON UPDATE CASCADE,
+  CONSTRAINT `fk_adopcion_usuario1`      FOREIGN KEY (`id_usuario`)     REFERENCES `usuario` (`id`)     ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `bitacora`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `bitacora` (
-  `id` INT NOT NULL,
-  `tabla` VARCHAR(50) NULL,
-  `accion` VARCHAR(10) NULL,
-  `fecha` TIMESTAMP NULL,
-  `datos` TEXT NULL,
-  `id_usuario` INT NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `tabla` VARCHAR(50),
+  `accion` VARCHAR(10),
+  `fecha` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `datos` TEXT,
+  `id_usuario` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_bitacora_usuario1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`)
-) ENGINE = InnoDB;
+  INDEX `fk_bitacora_usuario1_idx` (`id_usuario`),
+  CONSTRAINT `fk_bitacora_usuario1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `comportamiento`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `comportamiento` (
-  `id` INT NOT NULL,
-  `observaciones` VARCHAR(500) NULL,
-  `comportamientocol` VARCHAR(1000) NULL,
-  `date` TIMESTAMP NULL,
-  `inactive` TINYINT NULL,
-  `id_mascota` INT NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `observaciones` VARCHAR(500),
+  `comportamientocol` VARCHAR(1000),
+  `date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `inactive` TINYINT(1) DEFAULT 0,
+  `id_mascota` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_comportamiento_mascota1` FOREIGN KEY (`id_mascota`) REFERENCES `mascota` (`id`)
-) ENGINE = InnoDB;
+  INDEX `fk_comportamiento_mascota1_idx` (`id_mascota`),
+  CONSTRAINT `fk_comportamiento_mascota1` FOREIGN KEY (`id_mascota`) REFERENCES `mascota` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `enfermedad`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `enfermedad` (
-  `id` INT NOT NULL,
-  `descripcion` VARCHAR(300) NULL,
-  `tratamiento` VARCHAR(600) NULL,
-  `date` TIMESTAMP NULL,
-  `inactive` TINYINT NULL,
-  `id_mascota` INT NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `descripcion` VARCHAR(300),
+  `tratamiento` VARCHAR(600),
+  `date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `inactive` TINYINT(1) DEFAULT 0,
+  `id_mascota` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_enfermedad_mascota1` FOREIGN KEY (`id_mascota`) REFERENCES `mascota` (`id`)
-) ENGINE = InnoDB;
+  INDEX `fk_enfermedad_mascota1_idx` (`id_mascota`),
+  CONSTRAINT `fk_enfermedad_mascota1` FOREIGN KEY (`id_mascota`) REFERENCES `mascota` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `medicina`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `medicina` (
-  `id` INT NOT NULL,
-  `nombre` VARCHAR(45) NULL,
-  `descripcion` VARCHAR(250) NULL,
-  `indicaciones` VARCHAR(250) NULL,
-  `date` TIMESTAMP NULL,
-  `inactive` TINYINT NULL,
-  `id_enfermedad` INT NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(45),
+  `descripcion` VARCHAR(250),
+  `indicaciones` VARCHAR(250),
+  `date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `inactive` TINYINT(1) DEFAULT 0,
+  `id_enfermedad` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_medicina_enfermedad1` FOREIGN KEY (`id_enfermedad`) REFERENCES `enfermedad` (`id`)
-) ENGINE = InnoDB;
+  INDEX `fk_medicina_enfermedad1_idx` (`id_enfermedad`),
+  CONSTRAINT `fk_medicina_enfermedad1` FOREIGN KEY (`id_enfermedad`) REFERENCES `enfermedad` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `referencia_personal`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `referencia_personal` (
-  `id` INT NOT NULL,
-  `nombre` VARCHAR(200) NULL,
-  `telefono` VARCHAR(75) NULL,
-  `vinculo` VARCHAR(45) NULL,
-  `date` TIMESTAMP NULL,
-  `inactive` TINYINT NULL,
-  `id_solicitante` INT NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(200),
+  `telefono` VARCHAR(75),
+  `vinculo` VARCHAR(45),
+  `date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `inactive` TINYINT(1) DEFAULT 0,
+  `id_solicitante` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_referencia_personal_solicitante1` FOREIGN KEY (`id_solicitante`) REFERENCES `solicitante` (`id`)
-) ENGINE = InnoDB;
+  INDEX `fk_referencia_personal_solicitante1_idx` (`id_solicitante`),
+  CONSTRAINT `fk_referencia_personal_solicitante1` FOREIGN KEY (`id_solicitante`) REFERENCES `solicitante` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `retorno`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `retorno` (
-  `id` INT NOT NULL,
-  `fecha_de_retorno` DATE NULL,
-  `observaciones` VARCHAR(45) NULL,
-  `date` TIMESTAMP NULL,
-  `inactive` TINYINT NULL,
-  `id_adopcion` INT NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `fecha_de_retorno` DATE,
+  `observaciones` VARCHAR(255),
+  `date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `inactive` TINYINT(1) DEFAULT 0,
+  `id_adopcion` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_retorno_adopcion1` FOREIGN KEY (`id_adopcion`) REFERENCES `adopcion` (`id`)
-) ENGINE = InnoDB;
+  INDEX `fk_retorno_adopcion1_idx` (`id_adopcion`),
+  CONSTRAINT `fk_retorno_adopcion1` FOREIGN KEY (`id_adopcion`) REFERENCES `adopcion` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `seguimiento`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `seguimiento` (
-  `id` INT NOT NULL,
-  `fecha_seguimientol` DATE NULL,
-  `observaciones` VARCHAR(500) NULL,
-  `date` TIMESTAMP NULL,
-  `inactive` TINYINT NULL,
-  `id_adopcion` INT NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `fecha_seguimiento` DATE, -- corregido el probable typo
+  `observaciones` VARCHAR(500),
+  `date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `inactive` TINYINT(1) DEFAULT 0,
+  `id_adopcion` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_seguimiento_adopcion1` FOREIGN KEY (`id_adopcion`) REFERENCES `adopcion` (`id`)
-) ENGINE = InnoDB;
+  INDEX `fk_seguimiento_adopcion1_idx` (`id_adopcion`),
+  CONSTRAINT `fk_seguimiento_adopcion1` FOREIGN KEY (`id_adopcion`) REFERENCES `adopcion` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `vacuna`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `vacuna` (
-  `id` INT NOT NULL,
-  `descripcion` VARCHAR(155) NULL,
-  `aplicada` TINYINT NULL,
-  `fecha_aplicacion` DATE NULL,
-  `date` TIMESTAMP NULL,
-  `inactive` TINYINT NULL,
-  `id_mascota` INT NOT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `descripcion` VARCHAR(155),
+  `aplicada` TINYINT(1),
+  `fecha_aplicacion` DATE,
+  `date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `inactive` TINYINT(1) DEFAULT 0,
+  `id_mascota` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_vacuna_mascota1` FOREIGN KEY (`id_mascota`) REFERENCES `mascota` (`id`)
-) ENGINE = InnoDB;
-
--- -----------------------------------------------------
--- Table `visita`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `visita` (
-  `id` INT NOT NULL,
-  `fecha_visita` DATETIME NULL,
-  `espacio_ideal` TINYINT NULL,
-  `entorno` VARCHAR(500) NULL,
-  `observaciones` VARCHAR(500) NULL,
-  `date` TIMESTAMP NULL,
-  `inactive` TINYINT NULL,
-  `id_adopcion` INT NOT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_visita_adopcion1` FOREIGN KEY (`id_adopcion`) REFERENCES `adopcion` (`id`)
-) ENGINE = InnoDB;
+  INDEX `fk_vacuna_mascota1_idx` (`id_mascota`),
+  CONSTRAINT `fk_vacuna_mascota1` FOREIGN KEY (`id_mascota`) REFERENCES `mascota` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `rol`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `rol` (
-  `id` INT NOT NULL,
-  `nombre` VARCHAR(45) NULL,
-  `descripcion` VARCHAR(100) NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(45),
+  `descripcion` VARCHAR(100),
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB;
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `modulo`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `modulo` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(100) NULL,
-  `path` VARCHAR(255) NULL,
-  `descripcion` VARCHAR(255) NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(100),
+  `path` VARCHAR(255),
+  `descripcion` VARCHAR(255),
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB;
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `permiso`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `permiso` (
-  `create` TINYINT NULL,
-  `read` TINYINT NULL,
-  `update` TINYINT NULL,
-  `delete` TINYINT NULL,
-  `id_rol` INT NOT NULL,
-  `id_modulo` INT NOT NULL,
-  INDEX `fk_id_rol_idx` (`id_rol`),
+  `id_rol` INT UNSIGNED NOT NULL,
+  `id_modulo` INT UNSIGNED NOT NULL,
+  `create` TINYINT(1) NULL,
+  `read`   TINYINT(1) NULL,
+  `update` TINYINT(1) NULL,
+  `delete` TINYINT(1) NULL,
+  PRIMARY KEY (`id_rol`, `id_modulo`),
   INDEX `fk_id_modulo_idx` (`id_modulo`),
-  CONSTRAINT `fk_permiso_rol` FOREIGN KEY (`id_rol`) REFERENCES `rol` (`id`),
-  CONSTRAINT `fk_permiso_modulo` FOREIGN KEY (`id_modulo`) REFERENCES `modulo` (`id`)
-) ENGINE = InnoDB;
+  CONSTRAINT `fk_permiso_rol`    FOREIGN KEY (`id_rol`)    REFERENCES `rol` (`id`)       ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `fk_permiso_modulo` FOREIGN KEY (`id_modulo`) REFERENCES `modulo` (`id`)    ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `rol_usuario`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `rol_usuario` (
-  `id` INT GENERATED ALWAYS AS () VIRTUAL,
-  `id_rol` INT NOT NULL,
-  `id_usuario` INT NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_rol_usuario_rol_idx` (`id_rol`),
+  `id_rol` INT UNSIGNED NOT NULL,
+  `id_usuario` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id_rol`, `id_usuario`),
   INDEX `fk_rol_usuario_usuario_idx` (`id_usuario`),
-  CONSTRAINT `fk_rol_usuario_rol` FOREIGN KEY (`id_rol`) REFERENCES `rol` (`id`),
-  CONSTRAINT `fk_rol_usuario_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`)
-) ENGINE = InnoDB;
+  CONSTRAINT `fk_rol_usuario_rol`     FOREIGN KEY (`id_rol`)     REFERENCES `rol` (`id`)       ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT `fk_rol_usuario_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`)   ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

@@ -1,0 +1,163 @@
+﻿@import url("./Pages/MainLayout.css");
+@import url("./Pages/ViewPackageComponent.css");
+
+body {
+    background-color: #f3f2f7;
+}
+
+.text-morado {
+    color: #562E8A;
+}
+
+.text-azul {
+    color: #005A9E;
+}
+
+.text-azul-claro {
+    color: #0078D4;
+}
+
+.text-azul-oscuro {
+    color: #004578;
+}
+
+.text-naranja {
+    color: #f5821f;
+}
+
+.text-naranja-claro {
+    color: #F9A64B;
+}
+
+.text-rojo {
+    color: #D9432F;
+}
+
+.text-rojo-brillante {
+    color: #D9534F;
+}
+
+.text-verde {
+    color: #638b2c;
+}
+
+.min-h100 {
+    min-height: 100%;
+}
+
+.font-size-1 {
+    font-size: 1rem !important;
+}
+
+.main-container {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    max-height: 88%;
+    min-height: 88%;
+    overflow-y: scroll;
+    width: clamp(100%, 100%, 100%);
+    border-top: 4px solid #f5821f;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+@media screen and (min-width: 1920px) and (min-height: 1080px) {
+    .main-container {
+        max-height: 86%;
+        min-height: 86%;
+    }
+}
+
+@media screen and (max-width: 1366px) and (max-height: 768px) {
+    .main-container {
+        max-height: 85%;
+        min-height: 85%;
+    }
+}
+
+.form-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #562E8A;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.welcome-container {
+    height: 60vh;
+    display: flex;
+    align-items: center;
+}
+
+.description-text {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 0.9rem;
+    letter-spacing: normal;
+}
+
+pre {
+    font-family: var(--rz-text-font-family);
+    font-size: 1rem !important;
+    line-height: var(--rz-body-line-height);
+    padding: 0.5rem;
+    word-wrap: break-word; /* IE 5.5-7 */
+    white-space: -moz-pre-wrap; /* Firefox 1.0-2.0 */
+    white-space: pre-wrap; /* Modern browsers */
+    padding: 0;
+    background: none;
+    margin: 0;
+}
+
+.badge-activo,
+.badge-inactivo {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    width: 80px;
+    height: 24px;
+    font-size: 0.8rem;
+}
+
+.badge-activo {
+    width: 70px;
+    background-color: var(--rz-success-light) !important;
+    color: var(--rz-on-success-light) !important;
+}
+
+.badge-inactivo {
+    background-color: var(--rz-danger-light) !important;
+    color: var(--rz-on-danger-light) !important;
+}
+
+.badge-activo i,
+.badge-inactivo i {
+    font-size: 1.2rem;
+}
+
+.consolidation-dialog {
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.consolidation-dialog .rz-stack {
+    display: flex;
+    flex-direction: row !important;
+    justify-content: right !important;
+    margin-top: 1rem;
+}
+
+.clickable-text {
+    color: #562E8A;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.no-searchable-package {
+    height: 63vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #808080;
+}
