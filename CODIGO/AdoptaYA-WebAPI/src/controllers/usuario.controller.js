@@ -1,4 +1,4 @@
-const { usuario, rol } = require('../models');
+const { usuario, rol, rol_usuario } = require('../models');
 const { Op } = require('sequelize');
 const bcrypt = require('bcrypt');
 
@@ -43,6 +43,7 @@ exports.create = async (req, res, next) => {
     const { username, correo, password, nombre, apellido } = req.body;
     const hashed = await bcrypt.hash(password, 10);
     const item = await usuario.create({ username, correo, password: hashed, nombre, apellido });
+    const item_rol = await rol_usuario.create({ id_rol: 2, id_usuario: item.id });
     const { password: _omit, ...safe } = item.get({ plain: true });
     res.status(201).json(safe);
   } catch (e) { next(e); }

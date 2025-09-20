@@ -5,7 +5,8 @@ module.exports = (sequelize) => {
     id:          { type: DataTypes.INTEGER.UNSIGNED, primaryKey: true, autoIncrement: true },
     nombre:      { type: DataTypes.STRING(100) },
     path:        { type: DataTypes.STRING(255) },
-    descripcion: { type: DataTypes.STRING(255) }
+    descripcion: { type: DataTypes.STRING(255) },
+    icon:        { type: DataTypes.STRING(255) }
   }, {
     tableName: 'modulo'
   });

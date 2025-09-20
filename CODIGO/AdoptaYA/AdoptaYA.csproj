@@ -17,6 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Functionalities\Modules\Model\" />
+    <Folder Include="Functionalities\Security\Http\" />
+    <Folder Include="Functionalities\Security\Model\" />
+    <Folder Include="Functionalities\Security\Pages\" />
     <Folder Include="Lib\" />
     <Folder Include="wwwroot\fonts\" />
   </ItemGroup>

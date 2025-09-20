@@ -10,6 +10,7 @@ exports.toLoginResponseDTO = (accessToken, userInstance) => {
     Rol: r.nombre,
     Menu: (r.permisos || []).map(p => ({
         Nombre: p.modulo?.nombre ?? null,
+        Icon: p.modulo?.icon ?? null,
         Path: p.modulo?.path ?? null,
         Permisos: {
                 Create: !!p.get("create"),

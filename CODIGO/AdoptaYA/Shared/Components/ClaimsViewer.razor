@@ -36,9 +36,8 @@ else
     {
         <RadzenDataGrid Data="@menus" TItem="Menu" ShowPagingSummary="false" AllowPaging="false" ColumnWidth="200px">
             <Columns>
-                <RadzenDataGridColumn TItem="Menu" Property="Section" Title="Sección" />
-                <RadzenDataGridColumn TItem="Menu" Property="Module" Title="Módulo" />
                 <RadzenDataGridColumn TItem="Menu" Property="Icon" Title="Icono" />
+                <RadzenDataGridColumn TItem="Menu" Property="Name" Title="Nombre" />
                 <RadzenDataGridColumn TItem="Menu" Property="Path" Title="Ruta" />
                 <RadzenDataGridColumn TItem="Menu" Title="Permisos" Width="500px">
                     <Template Context="menu">

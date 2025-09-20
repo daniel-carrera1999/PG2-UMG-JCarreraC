@@ -9,6 +9,9 @@ public class Menu
     [JsonPropertyName("Path")]
     public string? Path { get; set; }
 
+    [JsonPropertyName("Icon")]
+    public string? Icon { get; set; }
+
     [JsonPropertyName("Permisos")]
     public Permissions? Permissions { get; set; }
 }

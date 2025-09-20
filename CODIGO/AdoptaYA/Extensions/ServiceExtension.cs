@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using AdoptaYA.Services.SGL;
 using AdoptaYA.Services.SGU;
 using AdoptaYA.Functionalities.MyPackages.Http;
+using AdoptaYA.Functionalities.Modules.Http;
 
 namespace AdoptaYA.Extensions;
 public static class ServiceExtension
@@ -20,9 +21,12 @@ public static class ServiceExtension
         services.AddScoped<ApiPostService>();
         services.AddScoped<ApiHeadService>();
         services.AddScoped<ApiPatchService>();
+        services.AddScoped<ApiDeleteService>();
+        services.AddScoped<ApiPutService>();
         services.AddScoped<SGLService>();
         services.AddScoped<SGUService>();
         services.AddScoped<MyPackagesHttp>();
+        services.AddScoped<ModulesHttp>();
 
         services.AddScoped<IAuthCookieService, AuthCookieService>();
         services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();

@@ -11,6 +11,8 @@ exports.loadUserFull = async (userId) => {
         include: [
           {
             model: permiso,
+            separate: true,
+            order: [['id_modulo', 'ASC']],
             include: [modulo]
           }
         ]

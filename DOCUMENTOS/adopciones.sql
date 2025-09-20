@@ -1,5 +1,8 @@
 -- MySQL Workbench Forward Engineering (corregido)
 
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
+
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
@@ -97,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `password` VARCHAR(100) NOT NULL,
   `nombre` VARCHAR(100),
   `apellido` VARCHAR(100),
-  `date` DATETIME NULL,
+  `date` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `inactive` TINYINT(1) DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_usuario_correo` (`correo`)
@@ -265,6 +268,7 @@ CREATE TABLE IF NOT EXISTS `modulo` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(100),
   `path` VARCHAR(255),
+  `icon` VARCHAR(255),
   `descripcion` VARCHAR(255),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -300,3 +304,24 @@ CREATE TABLE IF NOT EXISTS `rol_usuario` (
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+-- -----------------------------------------------------
+-- Configuración Inicial
+-- -----------------------------------------------------
+
+
+INSERT INTO rol (nombre, descripcion) VALUES ('Administrador', 'Acceso total');
+INSERT INTO rol (nombre, descripcion) VALUES ('Solicitante', 'Acciones de solicitante');
+
+
+
+INSERT INTO modulo (nombre, `path`, icon, descripcion) VALUES ('Inicio', '/home', 'home', 'Página principal');
+INSERT INTO modulo (nombre, `path`, icon, descripcion) VALUES ('Módulos', '/modulos', 'dashboard_2', 'Gestión de módulos');
+INSERT INTO modulo (nombre, `path`, icon, descripcion) VALUES ('Roles y permisos', '/roles', 'encrypted', 'Gestión de roles y permisos');
+INSERT INTO modulo (nombre, `path`, icon, descripcion) VALUES ('Usuarios', '/usuarios', 'person', 'Gestión de usuarios de la aplicación');
+
+INSERT INTO permiso (id_rol, id_modulo, `create`, `read`, `update`, `delete`) VALUES (1, 1, 0, 1, 0, 0);
+INSERT INTO permiso (id_rol, id_modulo, `create`, `read`, `update`, `delete`) VALUES (1, 2, 1, 1, 1, 1);
+INSERT INTO permiso (id_rol, id_modulo, `create`, `read`, `update`, `delete`) VALUES (1, 3, 1, 1, 1, 1);
+INSERT INTO permiso (id_rol, id_modulo, `create`, `read`, `update`, `delete`) VALUES (1, 4, 1, 1, 1, 1);
