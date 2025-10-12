@@ -4,38 +4,67 @@ const bcrypt = require('bcrypt');
 
 exports.list = async (req, res, next) => {
   try {
-    const { page = 1, size = 10, q } = req.query;
-    const limit = Math.min(parseInt(size, 10) || 10, 100);
-    const offset = (Math.max(parseInt(page, 10) || 1, 1) - 1) * limit;
+    const { q, inactive } = req.query;
 
-    const where = q ? {
-      [Op.or]: [
+    const where = {};
+
+    // Filtro por búsqueda (q)
+    if (q) {
+      where[Op.or] = [
         { username: { [Op.like]: `%${q}%` } },
         { correo:   { [Op.like]: `%${q}%` } },
         { nombre:   { [Op.like]: `%${q}%` } },
         { apellido: { [Op.like]: `%${q}%` } }
-      ]
-    } : {};
+      ];
+    }
 
-    const { rows, count } = await usuario.findAndCountAll({
+    // Filtro por estado inactive
+    if (inactive !== undefined && inactive !== '2') {
+      where.inactive = parseInt(inactive, 10);
+    }
+
+    const rows = await usuario.findAll({
       attributes: { exclude: ['password'] },
-      where, limit, offset, order: [['id', 'ASC']],
+      where,
+      order: [['id', 'ASC']],
       include: [{ model: rol, through: { attributes: [] } }]
     });
 
-    res.json({ data: rows, page: Number(page), size: limit, total: count });
-  } catch (e) { next(e); }
+    const data = rows.map(user => {
+      const userData = user.toJSON();
+      const { rols, ...rest } = userData;
+      return {
+        ...rest,
+        rol: rols?.[0] || null
+      };
+    });
+
+    res.json(data);
+  } catch (e) { 
+    next(e); 
+  }
 };
 
 exports.get = async (req, res, next) => {
   try {
     const item = await usuario.findByPk(req.params.id, {
-      attributes: { exclude: ['password'] }, // ⬅️
+      attributes: { exclude: ['password'] },
       include: [{ model: rol, through: { attributes: [] } }]
     });
+    
     if (!item) return res.status(404).json({ message: 'Not found' });
-    res.json(item);
-  } catch (e) { next(e); }
+    
+    const userData = item.toJSON();
+    const { rols, ...rest } = userData;
+    const data = {
+      ...rest,
+      rol: rols?.[0] || null
+    };
+    
+    res.json(data);
+  } catch (e) { 
+    next(e); 
+  }
 };
 
 exports.create = async (req, res, next) => {

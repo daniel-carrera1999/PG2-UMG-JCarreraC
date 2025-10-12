@@ -6,6 +6,7 @@
     justify-content: space-between;
     background-color: var(--rz-layout-body-background-color);
     border-radius: 0;
+    margin-bottom: 0;
 }
 
 .main-header-label {

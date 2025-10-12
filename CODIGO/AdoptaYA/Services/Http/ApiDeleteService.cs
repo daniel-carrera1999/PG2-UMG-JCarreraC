@@ -85,4 +85,55 @@ public class ApiDeleteService : IApiDeleteService
             throw;
         }
     }
+
+    public async Task<HttpResponseMessage> DeleteMultiIdKeyAsync(string url, int source = 1, bool log = false)
+    {
+        try
+        {
+            var baseUri = source switch
+            {
+                1 => _coreApiUrl,
+                2 => _uniUserAuthApiUrl,
+                3 => _uniUserClientApiUrl,
+                4 => _ubicacionesApiUrl,
+                _ => _coreApiUrl
+            };
+
+            // Construir URL con el ID
+            var requestUri = new Uri(baseUri, url);
+
+            var request = new HttpRequestMessage(HttpMethod.Delete, requestUri);
+            request.Headers.UserAgent.ParseAdd("AdoptaYA/1.0");
+
+            if (source != 2)
+            {
+                await _accessControlService.RefreshTokenIfExpiringAsync();
+                var tokenInfo = await _getCurrentUser.GetTokenInfoAsync();
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenInfo.AccessToken);
+            }
+
+            var response = await _httpClient.SendAsync(request);
+            var rawContent = await response.Content.ReadAsStringAsync();
+
+            if (log)
+            {
+                _logger.LogWarning("---------- API DELETE RESPONSE RAW ----------");
+                _logger.LogWarning("Request to: {Url}", requestUri);
+                _logger.LogWarning("HTTP Status: {Code} - {Reason}", response.StatusCode, response.ReasonPhrase);
+                _logger.LogWarning("Response JSON (raw):");
+                _logger.LogWarning(string.IsNullOrWhiteSpace(rawContent) ? "[VACÍO]" : rawContent);
+                _logger.LogWarning("---------------------------------------------");
+            }
+
+            return response;
+        }
+        catch (TaskCanceledException ex)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
 }

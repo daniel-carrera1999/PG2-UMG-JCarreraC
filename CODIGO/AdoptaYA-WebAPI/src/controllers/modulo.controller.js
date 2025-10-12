@@ -38,6 +38,23 @@ exports.remove = async (req, res, next) => {
   try {
     const item = await modulo.findByPk(req.params.id);
     if (!item) return res.status(404).json({ message: 'Not found' });
+
+    const permisosCount = await item.countPermisos();
+    
+    if (permisosCount > 0) {
+      return res.status(406).json({
+        type: 'https://tools.ietf.org/html/rfc7231#section-6.5.6',
+        title: 'Conflicto de integridad referencial',
+        status: 406,
+        detail: `No se puede eliminar el módulo porque tiene ${permisosCount} permiso(s) asociado(s)`,
+        datetime: new Date().toISOString(),
+        instance: req.originalUrl,
+        errors: {
+          'id_modulo': [`El módulo con ID ${req.params.id} tiene ${permisosCount} permiso(s) relacionado(s)`]
+        }
+      });
+    }
+
     await item.destroy();
     res.status(204).send();
   } catch (e) { next(e); }

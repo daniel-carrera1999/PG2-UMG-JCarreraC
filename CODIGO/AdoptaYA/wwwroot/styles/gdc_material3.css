@@ -1,17 +1,4 @@
-﻿/*.rz-label {
-    color: var(--rz-base-light);
-}
-
-.rz-sidebar-toggle {
-    color: var(--rz-base-light);
-}
-
-.rz-sidebar-toggle:focus-visible, .rz-sidebar-toggle:hover {
-    color: #ffffff;
-    background: #6F42C1;
-    transition: background 0.3s ease, color 0.3s ease;
-}*/
-:root {
+﻿:root {
     --rz-primary: #562E8A;
     --rz-primary-dark: #4A2D7F; 
     --rz-secondary: #8A68C7; 

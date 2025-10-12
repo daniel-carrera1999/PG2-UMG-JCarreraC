@@ -1,6 +1,6 @@
 ﻿@page "/modulos"
 
-@using AdoptaYA.Model
+@using AdoptaYA.Functionalities.Modules.Model;
 
 <SessionValidator title="Módulos" path="/modulos">
     <Loader Loading="loading" />
@@ -52,9 +52,14 @@
                     FilterMode="FilterMode.CheckBoxList" AllowSorting="true" AllowFiltering="true"
                     ApplyFilterText="Aplicar" ClearFilterText="Limpiar" EmptyText="No hay registros para mostrar">
         <Columns>
-            <RadzenDataGridColumn Property="Id" Title="Id Módulo" Width="125px" />
+            <RadzenDataGridColumn Property="Id" Title="Id" Width="100px" />
+            <RadzenDataGridColumn TextAlign="TextAlign.Center" Sortable="false" Filterable="false" Width="50px">
+                <Template Context="modulo">
+                    <RadzenIcon Icon="@modulo.Icon" />
+                </Template>
+            </RadzenDataGridColumn>
             <RadzenDataGridColumn Property="Name" Title="Nombre" />
-            <RadzenDataGridColumn Property="Icon" Title="Icono" />
+            <RadzenDataGridColumn Property="Path" Title="Path" />
             <RadzenDataGridColumn Property="Description" Title="Descripción" />
             <RadzenDataGridColumn Filterable="false" Sortable="false" Width="140px">
                 <Template Context="item">

@@ -325,3 +325,5 @@ INSERT INTO permiso (id_rol, id_modulo, `create`, `read`, `update`, `delete`) VA
 INSERT INTO permiso (id_rol, id_modulo, `create`, `read`, `update`, `delete`) VALUES (1, 2, 1, 1, 1, 1);
 INSERT INTO permiso (id_rol, id_modulo, `create`, `read`, `update`, `delete`) VALUES (1, 3, 1, 1, 1, 1);
 INSERT INTO permiso (id_rol, id_modulo, `create`, `read`, `update`, `delete`) VALUES (1, 4, 1, 1, 1, 1);
+
+INSERT INTO permiso (id_rol, id_modulo, `create`, `read`, `update`, `delete`) VALUES (2, 1, 0, 1, 0, 0);

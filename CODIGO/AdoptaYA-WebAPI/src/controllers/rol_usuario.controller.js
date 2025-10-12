@@ -23,8 +23,19 @@ exports.get = async (req, res, next) => {
 };
 
 exports.create = async (req, res, next) => {
-  try { res.status(201).json(await rol_usuario.create(req.body)); }
-  catch (e) { next(e); }
+  try {
+    const { id_usuario, id_rol } = req.body;
+    
+    await rol_usuario.destroy({ 
+      where: { id_usuario } 
+    });
+    
+    const nuevoRol = await rol_usuario.create({ id_usuario, id_rol });
+    
+    res.status(201).json(nuevoRol);
+  } catch (e) { 
+    next(e); 
+  }
 };
 
 exports.remove = async (req, res, next) => {

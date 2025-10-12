@@ -1,5 +1,5 @@
 using AdoptaYA.Functionalities.Modules.Http;
-using AdoptaYA.Model;
+using AdoptaYA.Functionalities.Modules.Model;
 using AdoptaYA.Services.Dialogs;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -24,7 +24,7 @@ public partial class Modules
     private async Task LoadDataAsync()
     {
         loading = true;
-        modulos = await modulesHttp.GetAllModuls();
+        modulos = await modulesHttp.GetAllModules();
         loading = false;
 
         StateHasChanged();

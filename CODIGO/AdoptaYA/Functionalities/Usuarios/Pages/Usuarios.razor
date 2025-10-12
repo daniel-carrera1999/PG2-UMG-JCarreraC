@@ -1,0 +1,27 @@
+﻿@page "/usuarios"
+
+<SessionValidator title="Usuarios" path="/usuarios">
+    <Loader Loading="loading" />
+
+    <RadzenDataGrid Data="@users" AllowPaging="true" PageSize="10" ColumnWidth="200px"
+                    AllowRowSelectOnRowClick="true" SelectionMode="DataGridSelectionMode.Single"
+                    FilterMode="FilterMode.CheckBoxList" AllowSorting="true" AllowFiltering="true"
+                    ApplyFilterText="Aplicar" ClearFilterText="Limpiar" EmptyText="No hay registros para mostrar">
+        <Columns>
+            <RadzenDataGridColumn Property="Id" Title="Id" Width="100px" />
+            <RadzenDataGridColumn Property="Username" Title="Usuario" />
+            <RadzenDataGridColumn Property="Name" Title="Nombre" />
+            <RadzenDataGridColumn Property="LastName" Title="Apellido" />
+            <RadzenDataGridColumn Property="Email" Title="Correo" />
+            <RadzenDataGridColumn Filterable="false" Sortable="false" Width="140px">
+                <Template Context="item">
+                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                        <RadzenButton Click=@(() => OpenManageUser(item.Id)) Icon="edit" Size="ButtonSize.Medium" ButtonStyle="ButtonStyle.Warning" />
+                        <RadzenButton Icon="delete" Size="ButtonSize.Medium" ButtonStyle="ButtonStyle.Danger" />
+                    </RadzenStack>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+
+</SessionValidator>

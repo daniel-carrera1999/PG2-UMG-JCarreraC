@@ -9,6 +9,8 @@ using AdoptaYA.Services.SGL;
 using AdoptaYA.Services.SGU;
 using AdoptaYA.Functionalities.MyPackages.Http;
 using AdoptaYA.Functionalities.Modules.Http;
+using AdoptaYA.Functionalities.Permissions.Http;
+using AdoptaYA.Functionalities.Usuarios.Http;
 
 namespace AdoptaYA.Extensions;
 public static class ServiceExtension
@@ -27,6 +29,8 @@ public static class ServiceExtension
         services.AddScoped<SGUService>();
         services.AddScoped<MyPackagesHttp>();
         services.AddScoped<ModulesHttp>();
+        services.AddScoped<RolesAndPermissionHttp>();
+        services.AddScoped<UsuariosHttp>();
 
         services.AddScoped<IAuthCookieService, AuthCookieService>();
         services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();

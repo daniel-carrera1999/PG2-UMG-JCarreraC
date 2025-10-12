@@ -10,6 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Functionalities\Security\**" />
+    <Content Remove="Functionalities\Security\**" />
+    <EmbeddedResource Remove="Functionalities\Security\**" />
+    <None Remove="Functionalities\Security\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="QRCoder" Version="1.6.0" />
     <PackageReference Include="Radzen.Blazor" Version="6.3.4" />
     <PackageReference Include="Riok.Mapperly" Version="4.2.1" />
@@ -17,10 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Functionalities\Modules\Model\" />
-    <Folder Include="Functionalities\Security\Http\" />
-    <Folder Include="Functionalities\Security\Model\" />
-    <Folder Include="Functionalities\Security\Pages\" />
     <Folder Include="Lib\" />
     <Folder Include="wwwroot\fonts\" />
   </ItemGroup>
