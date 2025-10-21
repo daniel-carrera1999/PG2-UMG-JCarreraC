@@ -1,14 +1,29 @@
 ﻿<style>
     .container-loader {
         position: absolute;
-        left: -6px;
-        bottom: 6px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
         width: 100%;
-        height: 90%;
+        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 10000;
+    }
+
+    .container-loader {
+        position: sticky;
+        top: 50%; /* Centrado vertical en el área visible */
+        left: 0;
+        width: 100%;
+        height: 0; /* Cambia a 0 para no afectar el layout */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        transform: translateY(-50%); /* Centra perfectamente */
     }
 </style>
 

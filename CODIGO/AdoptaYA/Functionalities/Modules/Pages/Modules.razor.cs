@@ -64,6 +64,8 @@ public partial class Modules
                 await LoadDataAsync();
             }
         }
+
+        isEdit = false;
     }
 
     private void CancelUpdate()

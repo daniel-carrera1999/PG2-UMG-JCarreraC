@@ -1,5 +1,4 @@
 -- MySQL Workbench Forward Engineering (corregido)
-
 SET NAMES utf8mb4;
 SET CHARACTER SET utf8mb4;
 
@@ -14,13 +13,12 @@ CREATE SCHEMA IF NOT EXISTS `adoptaya` DEFAULT CHARACTER SET utf8mb4 COLLATE utf
 USE `adoptaya`;
 
 -- Eliminar todas las tablas del esquema adoptaya
-USE `adoptaya`;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS;
 SET FOREIGN_KEY_CHECKS=0;
 
+DROP TABLE IF EXISTS `comportamiento`;
 DROP TABLE IF EXISTS `medicina`;
 DROP TABLE IF EXISTS `enfermedad`;
-DROP TABLE IF EXISTS `comportamiento`;
 DROP TABLE IF EXISTS `vacuna`;
 DROP TABLE IF EXISTS `referencia_personal`;
 DROP TABLE IF EXISTS `retorno`;
@@ -79,6 +77,10 @@ CREATE TABLE IF NOT EXISTS `mascota` (
   `tamanio` VARCHAR(45),
   `peso` DOUBLE,
   `color` VARCHAR(45),
+  `comportamiento` VARCHAR(1000),
+  `foto_principal` LONGTEXT,
+  `foto_secundaria` LONGTEXT,
+  `foto_adicional` LONGTEXT,
   `date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `inactive` TINYINT(1) DEFAULT 0,
   `id_animal` INT UNSIGNED NOT NULL,
@@ -141,21 +143,6 @@ CREATE TABLE IF NOT EXISTS `bitacora` (
   PRIMARY KEY (`id`),
   INDEX `fk_bitacora_usuario1_idx` (`id_usuario`),
   CONSTRAINT `fk_bitacora_usuario1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB;
-
--- -----------------------------------------------------
--- Table `comportamiento`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `comportamiento` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `observaciones` VARCHAR(500),
-  `comportamientocol` VARCHAR(1000),
-  `date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-  `inactive` TINYINT(1) DEFAULT 0,
-  `id_mascota` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `fk_comportamiento_mascota1_idx` (`id_mascota`),
-  CONSTRAINT `fk_comportamiento_mascota1` FOREIGN KEY (`id_mascota`) REFERENCES `mascota` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
@@ -314,16 +301,29 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 INSERT INTO rol (nombre, descripcion) VALUES ('Administrador', 'Acceso total');
 INSERT INTO rol (nombre, descripcion) VALUES ('Solicitante', 'Acciones de solicitante');
 
-
-
 INSERT INTO modulo (nombre, `path`, icon, descripcion) VALUES ('Inicio', '/home', 'home', 'Página principal');
 INSERT INTO modulo (nombre, `path`, icon, descripcion) VALUES ('Módulos', '/modulos', 'dashboard_2', 'Gestión de módulos');
 INSERT INTO modulo (nombre, `path`, icon, descripcion) VALUES ('Roles y permisos', '/roles', 'encrypted', 'Gestión de roles y permisos');
 INSERT INTO modulo (nombre, `path`, icon, descripcion) VALUES ('Usuarios', '/usuarios', 'person', 'Gestión de usuarios de la aplicación');
+INSERT INTO modulo (nombre, `path`, icon, descripcion) VALUES ('Animales', '/animales', 'cruelty_free', 'Gestión de animales y razas');
+INSERT INTO modulo (nombre, `path`, icon, descripcion) VALUES ('Mascotas', '/mascotas', 'pets', 'Gestión de mascotas');
+INSERT INTO modulo (nombre, `path`, icon, descripcion) VALUES ('Mi Perfil', '/mi_perfil', 'account_circle', 'Información de cuenta');
 
 INSERT INTO permiso (id_rol, id_modulo, `create`, `read`, `update`, `delete`) VALUES (1, 1, 0, 1, 0, 0);
 INSERT INTO permiso (id_rol, id_modulo, `create`, `read`, `update`, `delete`) VALUES (1, 2, 1, 1, 1, 1);
 INSERT INTO permiso (id_rol, id_modulo, `create`, `read`, `update`, `delete`) VALUES (1, 3, 1, 1, 1, 1);
 INSERT INTO permiso (id_rol, id_modulo, `create`, `read`, `update`, `delete`) VALUES (1, 4, 1, 1, 1, 1);
+INSERT INTO permiso (id_rol, id_modulo, `create`, `read`, `update`, `delete`) VALUES (1, 5, 1, 1, 1, 1);
+INSERT INTO permiso (id_rol, id_modulo, `create`, `read`, `update`, `delete`) VALUES (1, 6, 1, 1, 1, 1);
+INSERT INTO permiso (id_rol, id_modulo, `create`, `read`, `update`, `delete`) VALUES (1, 7, 1, 1, 1, 1);
 
-INSERT INTO permiso (id_rol, id_modulo, `create`, `read`, `update`, `delete`) VALUES (2, 1, 0, 1, 0, 0);
+INSERT INTO usuario (username, correo, password, nombre, apellido) VALUES ('admin', 'admin@admin.com', '$2b$10$LzQb1tnFPMfYVatgUTPaf.XAQam2wMLH.SxKN/YzUtC13DqkSDycS', 'admin', 'admin');
+INSERT INTO rol_usuario (id_rol, id_usuario) VALUES (1, 1);
+
+INSERT INTO animal (especie, raza) VALUES
+('Perro', 'Labrador Retriever'),
+('Perro', 'Golden Retriever'),
+('Gato', 'Persa'),
+('Gato', 'Siamés'),
+('Conejo', 'Holland Lop'),
+('Conejo', 'Mini Rex');

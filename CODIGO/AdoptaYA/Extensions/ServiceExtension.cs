@@ -11,6 +11,8 @@ using AdoptaYA.Functionalities.MyPackages.Http;
 using AdoptaYA.Functionalities.Modules.Http;
 using AdoptaYA.Functionalities.Permissions.Http;
 using AdoptaYA.Functionalities.Usuarios.Http;
+using AdoptaYA.Functionalities.Animals.Http;
+using AdoptaYA.Functionalities.Pets.Http;
 
 namespace AdoptaYA.Extensions;
 public static class ServiceExtension
@@ -31,6 +33,8 @@ public static class ServiceExtension
         services.AddScoped<ModulesHttp>();
         services.AddScoped<RolesAndPermissionHttp>();
         services.AddScoped<UsuariosHttp>();
+        services.AddScoped<AnimalHttp>();
+        services.AddScoped<PetsHttp>();
 
         services.AddScoped<IAuthCookieService, AuthCookieService>();
         services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();

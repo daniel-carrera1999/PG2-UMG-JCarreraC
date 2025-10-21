@@ -84,6 +84,7 @@
                     <RadzenColumn Size="12" SizeMD="4">
                         <RadzenStack Gap="0.25rem">
                             <RadzenText TextStyle="TextStyle.Subtitle2" class="rz-color-secondary">Nombre del Rol</RadzenText>
+                            <RadzenBadge BadgeStyle="BadgeStyle.Info" Text="@User.Rol.Name" />
                             <RadzenDropDown @bind-Value=@User.Rol.Id
                                             Data=@Roles
                                             TextProperty="Name"

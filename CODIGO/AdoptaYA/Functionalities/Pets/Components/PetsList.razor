@@ -1,0 +1,17 @@
+﻿@using AdoptaYA.Functionalities.Pets.Model
+
+<Loader Loading="@loading" />
+
+<RadzenDataList WrapItems="true" AllowPaging="true" Data="@pets" TItem="PetsView">
+    <Template Context="pet">
+        <RadzenCard Style="flex: 1; cursor: pointer;" @onclick="@(() => OpenViewPet(pet.Id))">
+            <RadzenStack AlignItems="AlignItems.Center" Gap="1rem">
+                <RadzenImage Path="@pet.PrincipalPhoto" Style="width: 80px; height: 80px; border-radius: 50%" AlternateText="@pet.Name" />
+                <RadzenStack Gap="0">
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.P" TextAlign="TextAlign.Center">@pet.Name</RadzenText>
+                    <RadzenText TextStyle="TextStyle.Body2" TextAlign="TextAlign.Center">@($"{pet.Animal!.Species} - {pet.Animal!.Breed}")</RadzenText>
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenCard>
+    </Template>
+</RadzenDataList>

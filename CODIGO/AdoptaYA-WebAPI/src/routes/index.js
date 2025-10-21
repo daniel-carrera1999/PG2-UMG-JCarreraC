@@ -6,5 +6,7 @@ router.use('/modulo', require('./modulo.routes'));
 router.use('/permiso', require('./permiso.routes'));
 router.use('/rol_usuario', require('./rol_usuario.routes'));
 router.use('/auth', require('./auth.routes'));
+router.use('/animal', require('./animal.routes'));
+router.use('/mascota', require('./mascota.routes'));
 
 module.exports = router;
