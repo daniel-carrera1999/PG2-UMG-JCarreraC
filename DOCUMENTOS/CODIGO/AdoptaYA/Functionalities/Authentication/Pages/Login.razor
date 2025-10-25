@@ -1,0 +1,41 @@
+﻿@page "/"
+
+@layout LoginLayout
+
+@using AdoptaYA.Functionalities.Authentication.Model.Form
+
+<PageTitle>Iniciar Sesión - AdoptaYA</PageTitle>
+<div class="login-card">
+    <h1 class="title">AdoptaYA</h1>
+    <div class="accent-bar"></div>
+    <p class="subtitle">@subtitle</p>
+
+    <RadzenTemplateForm Data="@formLogin" Submit="@OnSubmitAsync" TItem="LoginForm" class="form-login">
+
+        <DataAnnotationsValidator />
+
+        <RadzenRow>
+            <RadzenFormField Text="Correo" Variant="Variant.Filled" class="w-100 rz-text-align-left">
+                <RadzenTextBox @bind-Value="formLogin.Email" Name="Email" class="form-input" autocomplete="off" />
+            </RadzenFormField>
+            <ValidationMessage For="@(() => formLogin.Email)" class="rz-message rz-messages-error" />
+        </RadzenRow>
+
+        <RadzenRow>
+            <RadzenFormField Text="Contraseña" Variant="Variant.Filled" class="w-100 rz-text-align-left">
+                <RadzenPassword @bind-Value="formLogin.Password" Name="Password" class="form-input" automcomplete="off" />
+            </RadzenFormField>
+            <ValidationMessage For="@(() => formLogin.Password)" class="rz-message rz-messages-error" />
+        </RadzenRow>
+
+        <RadzenLink Text="¿Olvidaste tu contraseña?" Path="/recuperar" class="reset-password" />
+
+        <RadzenRow class="rz-display-flex rz-justify-content-center">
+            <RadzenButton Text="Iniciar sesión" IsBusy="@busy" BusyText="Iniciando sesión" ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" class="login-submit" />
+        </RadzenRow>
+
+    </RadzenTemplateForm>
+
+    <p class="signup-link">¿Aún no cuentas con acceso?<br /><RadzenLink Text="Registrate aquí." Path="/solicitar-acceso" class="request-access" /></p>
+
+</div>

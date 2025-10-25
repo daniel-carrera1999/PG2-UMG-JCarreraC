@@ -13,7 +13,6 @@ CREATE SCHEMA IF NOT EXISTS `adoptaya` DEFAULT CHARACTER SET utf8mb4 COLLATE utf
 USE `adoptaya`;
 
 -- Eliminar todas las tablas del esquema adoptaya
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS;
 SET FOREIGN_KEY_CHECKS=0;
 
 DROP TABLE IF EXISTS `comportamiento`;
@@ -34,7 +33,23 @@ DROP TABLE IF EXISTS `animal`;
 DROP TABLE IF EXISTS `solicitante`;
 DROP TABLE IF EXISTS `usuario`;
 
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET FOREIGN_KEY_CHECKS=1;
+
+-- -----------------------------------------------------
+-- Table `usuario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `usuario` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(25),
+  `correo` VARCHAR(100) NOT NULL,
+  `password` VARCHAR(100) NOT NULL,
+  `nombre` VARCHAR(100),
+  `apellido` VARCHAR(100),
+  `date` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `inactive` TINYINT(1) DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ux_usuario_correo` (`correo`)
+) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
 -- Table `solicitante`
@@ -51,9 +66,17 @@ CREATE TABLE IF NOT EXISTS `solicitante` (
   `ingresos` DOUBLE,
   `estado_civil` VARCHAR(45),
   `ocupacion` VARCHAR(100),
+  `id_usuario` INT UNSIGNED NULL,
   `date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `inactive` TINYINT(1) DEFAULT 0,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ux_solicitante_usuario` (`id_usuario`),
+  INDEX `fk_solicitante_usuario1_idx` (`id_usuario`),
+  CONSTRAINT `fk_solicitante_usuario1` 
+    FOREIGN KEY (`id_usuario`) 
+    REFERENCES `usuario` (`id`) 
+    ON UPDATE CASCADE 
+    ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
@@ -90,22 +113,6 @@ CREATE TABLE IF NOT EXISTS `mascota` (
     FOREIGN KEY (`id_animal`)
     REFERENCES `animal` (`id`)
     ON UPDATE CASCADE
-) ENGINE=InnoDB;
-
--- -----------------------------------------------------
--- Table `usuario`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `usuario` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(25),
-  `correo` VARCHAR(100) NOT NULL,
-  `password` VARCHAR(100) NOT NULL,
-  `nombre` VARCHAR(100),
-  `apellido` VARCHAR(100),
-  `date` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  `inactive` TINYINT(1) DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `ux_usuario_correo` (`correo`)
 ) ENGINE=InnoDB;
 
 -- -----------------------------------------------------
@@ -212,7 +219,7 @@ CREATE TABLE IF NOT EXISTS `retorno` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `seguimiento` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `fecha_seguimiento` DATE, -- corregido el probable typo
+  `fecha_seguimiento` DATE,
   `observaciones` VARCHAR(500),
   `date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `inactive` TINYINT(1) DEFAULT 0,
@@ -296,7 +303,6 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 -- Configuración Inicial
 -- -----------------------------------------------------
-
 
 INSERT INTO rol (nombre, descripcion) VALUES ('Administrador', 'Acceso total');
 INSERT INTO rol (nombre, descripcion) VALUES ('Solicitante', 'Acciones de solicitante');

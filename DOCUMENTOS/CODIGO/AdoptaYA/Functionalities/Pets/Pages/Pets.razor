@@ -3,7 +3,7 @@
 <SessionValidator title="Mascotas" path="/mascotas">
 	<Loader Loading="@loading" />
 
-    <RadzenTabs TabPosition="TabPosition.Top" RenderMode="TabRenderMode.Client" @bind-SelectedIndex="TabsSelectedIndex" Style="min-height: 50dvh;">
+    <RadzenTabs TabPosition="TabPosition.Top" RenderMode="TabRenderMode.Client" @bind-SelectedIndex="TabsSelectedIndex">
         <Tabs>
             <RadzenTabsItem Text="Mascotas">
                 <AdoptaYA.Functionalities.Pets.Components.PetsList @ref="petListRef" />

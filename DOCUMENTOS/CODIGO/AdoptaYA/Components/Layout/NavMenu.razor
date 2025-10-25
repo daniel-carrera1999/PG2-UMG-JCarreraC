@@ -1,0 +1,16 @@
+﻿<RadzenSidebar Expanded="@(sidebarExpanded)" Responsive="false" class="rz-pb-6">
+    <RadzenPanelMenu>
+        <RadzenStack class="sidebar-container-logo">
+            <RadzenImage Path="/images/AdoptaYA.png" class="sidebar-logo" />
+            <RadzenStack class="sidebar-user-info">
+                <RadzenText TextStyle="TextStyle.Body1">@rol</RadzenText>
+                <RadzenText TextStyle="TextStyle.Body2">@name</RadzenText>
+            </RadzenStack>
+            <hr class="rz-w-100" />
+        </RadzenStack>
+        @foreach (var item in menus)
+        {
+            <RadzenPanelMenuItem Text="@item.Name" Icon="@item.Icon" Path="@item.Path" class="fw-normal" />
+        }
+    </RadzenPanelMenu>
+</RadzenSidebar>

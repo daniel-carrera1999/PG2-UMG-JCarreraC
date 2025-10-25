@@ -1,0 +1,12 @@
+@import url("/css/material3-base.css");
+@import url("/css/site.css");
+@import url("/fonts/MaterialSymbolsOutlined.woff2");
+
+@import url("./gdc.css");
+@import url("./gdc_material3.css");
+
+@import url("./fonts.css");
+@import url("./EnvelopeLoader.css");
+
+@import url("./Pages/MainLayout.css");
+@import url("./Pages/ViewPackageComponent.css");

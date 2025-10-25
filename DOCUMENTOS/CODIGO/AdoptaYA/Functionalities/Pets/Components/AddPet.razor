@@ -1,0 +1,233 @@
+﻿@using AdoptaYA.Functionalities.Pets.Model
+
+<Loader loading="@loading" />
+
+<RadzenTemplateForm TItem="MascotaRequestDTO" Data="@form" Submit="@SubmitAsync">
+
+    <DataAnnotationsValidator />
+
+    <RadzenRow Gap="2rem" class="rz-p-0 rz-p-lg-4">
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenStack>
+                <RadzenFieldset Text="Información de la Mascota">
+                    <RadzenStack Gap="1rem">
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Tipo de Animal" Component="IdAnimal" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenDropDown @bind-Value="form.IdAnimal" Data="@animals"
+                                                TextProperty="DisplayName" ValueProperty="Id"
+                                                Placeholder="Seleccione un animal"
+                                                Style="width: 100%; margin-top: 1px;" Name="IdAnimal"
+                                                AllowClear="true" AllowFiltering="true"
+                                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" />
+                                <ValidationMessage For="@(() => form.IdAnimal)" class="rz-message rz-messages-error" />
+                            </RadzenColumn>
+                        </RadzenRow>
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Nombre" Component="Name" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenTextBox @bind-Value="form.Name" Style="width: 100%;" Name="Name" />
+                                <ValidationMessage For="@(() => form.Name)" class="rz-message rz-messages-error" />
+                            </RadzenColumn>
+                        </RadzenRow>
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Tamaño" Component="Size" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenDropDown @bind-Value="form.Size" Data="@size" Placeholder="Tamaño" Style="width: 100%;" Name="Size" />
+                                <ValidationMessage For="@(() => form.Size)" class="rz-message rz-messages-error" />
+                            </RadzenColumn>
+                        </RadzenRow>
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Peso (kg)" Component="Weight" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenNumeric @bind-Value="form.Weight" Style="width: 100%;" Name="Weight"
+                                               TValue="double?" ShowUpDown="false" />
+                                <ValidationMessage For="@(() => form.Weight)" class="rz-message rz-messages-error" />
+                            </RadzenColumn>
+                        </RadzenRow>
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Color" Component="Color" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenTextBox @bind-Value="form.Color" Style="width: 100%;" Name="Color" />
+                                <ValidationMessage For="@(() => form.Color)" class="rz-message rz-messages-error" />
+                            </RadzenColumn>
+                        </RadzenRow>
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Comportamiento" Component="Behavior" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenTextArea @bind-Value="form.Behavior" Rows="4"
+                                                Style="width: 100%;" Name="Behavior" />
+                                <ValidationMessage For="@(() => form.Behavior)" class="rz-message rz-messages-error" />
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenStack>
+                </RadzenFieldset>
+
+                <RadzenFieldset Text="Fotografías">
+                    <RadzenStack Gap="1rem">
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Foto Principal" Component="MainPhoto" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenFileInput @bind-Value="form.MainPhoto" Accept="image/*" MaxFileSize="10485760" TValue="string"
+                                                 Style="width: 100%; margin-top: 1px;" Name="MainPhoto" ChooseText="Seleccionar"
+                                                 Change="@(args => OnFileChange(args, "main"))" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})" />
+                                <ValidationMessage For="@(() => form.MainPhoto)" class="rz-message rz-messages-error" />
+                            </RadzenColumn> 
+                        </RadzenRow>
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Foto Secundaria" Component="SecondaryPhoto" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenFileInput @bind-Value="form.SecondaryPhoto" Accept="image/*" MaxFileSize="10485760"
+                                                 Style="width: 100%;" Name="SecondaryPhoto" ChooseText="Seleccionar" />
+                            </RadzenColumn>
+                        </RadzenRow>
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Foto Adicional" Component="AdditionalPhoto" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenFileInput @bind-Value="form.AdditionalPhoto" Accept="image/*" MaxFileSize="10485760"
+                                                 Style="width: 100%;" Name="AdditionalPhoto" ChooseText="Seleccionar" />
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenStack>
+                </RadzenFieldset>
+            </RadzenStack>
+        </RadzenColumn>
+
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenStack>
+                <RadzenFieldset Text="Vacunas">
+                    <RadzenStack Gap="1rem">
+                        @if (form.Vaccines != null)
+                        {
+                            @for (int i = 0; i < form.Vaccines.Count; i++)
+                            {
+                                var index = i;
+                                <RadzenCard>
+                                    <RadzenStack Gap="0.5rem">
+                                        <RadzenRow AlignItems="AlignItems.Center">
+                                            <RadzenColumn Size="10">
+                                                <RadzenText TextStyle="TextStyle.Subtitle2">Vacuna @(index + 1)</RadzenText>
+                                            </RadzenColumn>
+                                            <RadzenColumn Size="2" class="rz-text-align-end">
+                                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger"
+                                                                Size="ButtonSize.Small"
+                                                                Click="@(() => RemoveVaccine(index))" />
+                                            </RadzenColumn>
+                                        </RadzenRow>
+                                        <RadzenTextBox @bind-Value="form.Vaccines[index].Description"
+                                                        Placeholder="Descripción" Style="width: 100%;" />
+                                        <RadzenRow>
+                                            <RadzenColumn Size="6">
+                                                <RadzenRadioButtonList @bind-Value="@form.Vaccines[index].Applied" TValue="int?" Style="width: 100%;" Visible="true">
+                                                    <Items>
+                                                        <RadzenRadioButtonListItem Text="No aplicada" Value="@((int?)0)" />
+                                                        <RadzenRadioButtonListItem Text="Aplicada" Value="@((int?)1)" />
+                                                    </Items>
+                                                </RadzenRadioButtonList>
+                                            </RadzenColumn>
+                                            <RadzenColumn Size="6">
+                                                <RadzenDatePicker @bind-Value="form.Vaccines[index].DateApplied" DateFormat="dd/MM/yyyy" Name="DatePickerDateOnlyType" />
+                                            </RadzenColumn>
+                                        </RadzenRow>
+                                    </RadzenStack>
+                                </RadzenCard>
+                            }
+                        }
+                        <RadzenButton Icon="add" Text="Agregar Vacuna" ButtonStyle="ButtonStyle.Success"
+                                        Click="@AddVaccine" />
+                    </RadzenStack>
+                </RadzenFieldset>
+
+                <RadzenFieldset Text="Enfermedades">
+                    <RadzenStack Gap="1rem">
+                        @if (form.Diseases != null)
+                        {
+                            @for (int i = 0; i < form.Diseases.Count; i++)
+                            {
+                                var index = i;
+                                <RadzenCard>
+                                    <RadzenStack Gap="0.5rem">
+                                        <RadzenRow AlignItems="AlignItems.Center">
+                                            <RadzenColumn Size="10">
+                                                <RadzenText TextStyle="TextStyle.Subtitle2">Enfermedad @(index + 1)</RadzenText>
+                                            </RadzenColumn>
+                                            <RadzenColumn Size="2" class="rz-text-align-end">
+                                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger"
+                                                                Size="ButtonSize.Small"
+                                                                Click="@(() => RemoveDisease(index))" />
+                                            </RadzenColumn>
+                                        </RadzenRow>
+                                        <RadzenTextBox @bind-Value="form.Diseases[index].Description"
+                                                        Placeholder="Descripción" Style="width: 100%;" />
+                                        <RadzenTextArea @bind-Value="form.Diseases[index].Treatment"
+                                                        Placeholder="Tratamiento" Rows="2" Style="width: 100%;" />
+
+                                        <RadzenText TextStyle="TextStyle.Subtitle2" class="rz-mt-2">Medicinas</RadzenText>
+                                        @if (form.Diseases[index].Medications != null)
+                                        {
+                                            @for (int j = 0; j < form.Diseases[index].Medications.Count; j++)
+                                            {
+                                                var medIndex = j;
+                                                <RadzenCard Style="background-color: var(--rz-panel-background);">
+                                                    <RadzenStack Gap="0.5rem">
+                                                        <RadzenRow AlignItems="AlignItems.Center">
+                                                            <RadzenColumn Size="10">
+                                                                <RadzenText TextStyle="TextStyle.Caption">Medicina @(medIndex + 1)</RadzenText>
+                                                            </RadzenColumn>
+                                                            <RadzenColumn Size="2" class="rz-text-align-end">
+                                                                <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger"
+                                                                                Size="ButtonSize.ExtraSmall"
+                                                                                Click="@(() => RemoveMedication(index, medIndex))" />
+                                                            </RadzenColumn>
+                                                        </RadzenRow>
+                                                        <RadzenTextBox @bind-Value="form.Diseases[index].Medications[medIndex].Name"
+                                                                        Placeholder="Nombre" Style="width: 100%;" />
+                                                        <RadzenTextBox @bind-Value="form.Diseases[index].Medications[medIndex].Description"
+                                                                        Placeholder="Descripción" Style="width: 100%;" />
+                                                        <RadzenTextBox @bind-Value="form.Diseases[index].Medications[medIndex].Indications"
+                                                                        Placeholder="Indicaciones" Style="width: 100%;" />
+                                                    </RadzenStack>
+                                                </RadzenCard>
+                                            }
+                                        }
+                                        <RadzenButton Icon="add" Text="Agregar Medicina"
+                                                        ButtonStyle="ButtonStyle.Info" Size="ButtonSize.Small"
+                                                        Click="@(() => AddMedication(index))" />
+                                    </RadzenStack>
+                                </RadzenCard>
+                            }
+                        }
+                        <RadzenButton Icon="add" Text="Agregar Enfermedad" ButtonStyle="ButtonStyle.Success"
+                                        Click="@AddDisease" />
+                    </RadzenStack>
+                </RadzenFieldset>
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center"
+                    Gap="1rem" class="rz-mt-8 rz-mb-4">
+        <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Large"
+                        Icon="save" Text="Guardar" />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat"
+                        Size="ButtonSize.Large" Icon="cancel" Text="Cancelar" Click="@Cancel" />
+    </RadzenStack>
+</RadzenTemplateForm>

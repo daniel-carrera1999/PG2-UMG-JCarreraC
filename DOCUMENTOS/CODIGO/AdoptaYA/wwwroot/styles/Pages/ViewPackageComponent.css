@@ -1,0 +1,16 @@
+@media (max-width: 1279px) {
+    .order-mobile-first {
+        order: -1 !important;
+    }
+    .order-mobile-last {
+        order: 1 !important;
+    }
+}
+
+.min-height-40vh {
+    min-height: 40vh;
+}
+
+.card-full-height {
+    height: 100%;
+}

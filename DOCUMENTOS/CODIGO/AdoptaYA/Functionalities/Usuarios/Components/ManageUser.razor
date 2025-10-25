@@ -1,0 +1,112 @@
+﻿<Loader Loading="@loading" />
+
+@if (User != null)
+{
+    <RadzenCard>
+        <RadzenStack Gap="1rem">
+            <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H2">Datos Personales</RadzenText>
+                    
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeMD="6">
+                    <RadzenStack Gap="0.25rem">
+                        <RadzenText TextStyle="TextStyle.Subtitle2" class="rz-color-secondary">ID</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1">@User.Id</RadzenText>
+                    </RadzenStack>
+                </RadzenColumn>
+                        
+                <RadzenColumn Size="12" SizeMD="6">
+                    <RadzenStack Gap="0.25rem">
+                        <RadzenText TextStyle="TextStyle.Subtitle2" class="rz-color-secondary">Usuario</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1">@User.Username</RadzenText>
+                    </RadzenStack>
+                </RadzenColumn>
+            </RadzenRow>
+                    
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeMD="6">
+                    <RadzenStack Gap="0.25rem">
+                        <RadzenText TextStyle="TextStyle.Subtitle2" class="rz-color-secondary">Nombre</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1">@User.Name</RadzenText>
+                    </RadzenStack>
+                </RadzenColumn>
+                        
+                <RadzenColumn Size="12" SizeMD="6">
+                    <RadzenStack Gap="0.25rem">
+                        <RadzenText TextStyle="TextStyle.Subtitle2" class="rz-color-secondary">Apellido</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1">@User.LastName</RadzenText>
+                    </RadzenStack>
+                </RadzenColumn>
+            </RadzenRow>
+                    
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeMD="6">
+                    <RadzenStack Gap="0.25rem">
+                        <RadzenText TextStyle="TextStyle.Subtitle2" class="rz-color-secondary">Correo Electrónico</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1">@User.Email</RadzenText>
+                    </RadzenStack>
+                </RadzenColumn>
+                        
+                <RadzenColumn Size="12" SizeMD="6">
+                    <RadzenStack Gap="0.25rem">
+                        <RadzenText TextStyle="TextStyle.Subtitle2" class="rz-color-secondary">Fecha de Registro</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body1">@User.Date.ToString("dd/MM/yyyy HH:mm")</RadzenText>
+                    </RadzenStack>
+                </RadzenColumn>
+            </RadzenRow>
+                    
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeMD="6">
+                    <RadzenStack Gap="0.25rem">
+                        <RadzenText TextStyle="TextStyle.Subtitle2" class="rz-color-secondary">Estado</RadzenText>
+                        @if (User.Inactive == 0)
+                        {
+                            <RadzenBadge BadgeStyle="BadgeStyle.Success" Text="Activo" />
+                        }
+                        else
+                        {
+                            <RadzenBadge BadgeStyle="BadgeStyle.Danger" Text="Inactivo" />
+                        }
+                    </RadzenStack>
+                </RadzenColumn>
+            </RadzenRow>
+
+            @if (User.Rol != null)
+            {
+                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H2">Rol Asignado</RadzenText>
+                <RadzenRow>
+                    <RadzenColumn Size="12" SizeMD="4">
+                        <RadzenStack Gap="0.25rem">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" class="rz-color-secondary">ID del Rol</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1">@User.Rol.Id</RadzenText>
+                        </RadzenStack>
+                    </RadzenColumn>
+
+                    <RadzenColumn Size="12" SizeMD="4">
+                        <RadzenStack Gap="0.25rem">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" class="rz-color-secondary">Nombre del Rol</RadzenText>
+                            <RadzenBadge BadgeStyle="BadgeStyle.Info" Text="@User.Rol.Name" />
+                            <RadzenDropDown @bind-Value=@User.Rol.Id
+                                            Data=@Roles
+                                            TextProperty="Name"
+                                            ValueProperty="Id"
+                                            Style="max-width: 400px;"
+                                            Name="DrpRoles"
+                                            Change="@(() => SetRolToUser(User.Rol.Id, User.Id))" />
+                        </RadzenStack>
+                    </RadzenColumn>
+
+                    <RadzenColumn Size="12" SizeMD="4">
+                        <RadzenStack Gap="0.25rem">
+                            <RadzenText TextStyle="TextStyle.Subtitle2" class="rz-color-secondary">Descripción</RadzenText>
+                            <RadzenText TextStyle="TextStyle.Body1">@User.Rol.Description</RadzenText>
+                        </RadzenStack>
+                    </RadzenColumn>
+                </RadzenRow>
+            }
+        </RadzenStack>
+    </RadzenCard>
+}
+else
+{
+    <RadzenText TextStyle="TextStyle.Body1">No se encontró información del usuario.</RadzenText>
+}

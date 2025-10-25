@@ -1,0 +1,53 @@
+﻿@using System.Security.Claims
+@using System.Text.Json
+@using Microsoft.AspNetCore.Components.Authorization
+@using AdoptaYA.Functionalities.Authentication.Model.Session
+
+@inject AuthenticationStateProvider AuthStateProvider;
+
+<RadzenText Text="Claims del usuario autenticado" TextStyle="TextStyle.H3" />
+
+@if (user == null)
+{
+    <p>Cargando información del usuario...</p>
+}
+else if (!user.Identity?.IsAuthenticated ?? true)
+{
+    <p>No estás autenticado.</p>
+}
+else
+{
+    <RadzenText Text="Claims generales" TextStyle="TextStyle.H4" />
+    <RadzenDataGrid Data="@user.Claims.Where(c => !c.Type.StartsWith("Menu:"))" TItem="Claim" ShowPagingSummary="false" AllowPaging="false">
+        <Columns>
+            <RadzenDataGridColumn TItem="Claim" Property="Type" Title="Tipo" />
+            <RadzenDataGridColumn TItem="Claim" Property="Value" Title="Valor" />
+        </Columns>
+    </RadzenDataGrid>
+
+    <br />
+
+    <RadzenText Text="Menús deserializados" TextStyle="TextStyle.H4" />
+    @if (menus.Count == 0)
+    {
+        <p>No hay menús en los claims.</p>
+    }
+    else
+    {
+        <RadzenDataGrid Data="@menus" TItem="Menu" ShowPagingSummary="false" AllowPaging="false" ColumnWidth="200px">
+            <Columns>
+                <RadzenDataGridColumn TItem="Menu" Property="Icon" Title="Icono" />
+                <RadzenDataGridColumn TItem="Menu" Property="Name" Title="Nombre" />
+                <RadzenDataGridColumn TItem="Menu" Property="Path" Title="Ruta" />
+                <RadzenDataGridColumn TItem="Menu" Title="Permisos" Width="500px">
+                    <Template Context="menu">
+                        Creación: @(menu.Permissions?.Create == true ? "✅" : "❌") |
+                        Lectura: @(menu.Permissions?.Read == true ? "✅" : "❌") |
+                        Actualización: @(menu.Permissions?.Update == true ? "✅" : "❌") |
+                        Eliminación: @(menu.Permissions?.Delete == true ? "✅" : "❌")
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    }
+}

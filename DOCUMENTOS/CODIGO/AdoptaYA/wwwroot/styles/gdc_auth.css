@@ -1,0 +1,231 @@
+:root {
+    --rz-form-field-filled-background-color: #F0EDFF !important;
+    --rz-form-field-label-floating-background-color: #F0EDFF !important;
+    --rz-base-200: #F0EDFF !important;
+}
+
+.login-card,
+.request-access-card {
+    background: white;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.request-access-card {
+    max-width: 500px;
+}
+
+.title,
+.title-2 {
+    font-family: "Poppins-Bold";
+    font-weight: bold;
+    font-size: 1.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.title-2 {
+    font-size: 1rem;
+}
+
+.subtitle {
+    font-family: "Poppins-Regular";
+    font-size: 0.75rem;
+    color: #525252;
+    margin-bottom: 2rem;
+}
+
+.accent-bar {
+    width: 40px;
+    height: 4px;
+    background: #5038ed !important;
+    background: linear-gradient(90deg,rgba(80, 56, 237, 1) 0%, rgba(145, 129, 244, 1) 100%) !important;
+    margin: 0 auto 1rem auto;
+    border-radius: 2px;
+}
+
+.form-login,
+.form-solicitud,
+.form-cambio-password {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.form-input {
+    font-family: "Poppins-Regular";
+    font-size: 1rem;
+    color: #1C1C1C;
+}
+
+.reset-password,
+.request-access,
+.login {
+    font-family: "Poppins-Bold";
+    font-size: 0.75rem;
+    letter-spacing: 0.01rem;
+    display:block;
+    text-align:right;
+    margin:10px 0;
+    color:#8e24aa;
+    margin-top: 0;
+    cursor: pointer;
+}
+
+.request-access,
+.login {
+    text-align: center;
+}
+
+.reset-password:hover,
+.request-access:hover,
+.login:hover {
+    color: #6a1b9a;
+    text-decoration: underline;
+}
+
+.login-submit,
+.solicitud-submit,
+.cambio-password-submit,
+.login-submit:focus,
+.solicitud-submit:focus,
+.cambio-password-submit:focus {
+    background: #9181F4;
+    background: linear-gradient(90deg,rgba(145, 129, 244, 1) 0%, rgba(80, 56, 237, 1) 100%) !important;
+    border-radius: 1rem;
+    font-family: "Poppins-Bold";
+    font-size: 0.75rem;
+    line-height: 0;
+    letter-spacing: 0.01rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    width: 133px;
+    transition: width 0.1s ease;
+}
+
+.solicitud-submit,
+.solicitud-submit:focus {
+    width: 153px;
+}
+
+.cambio-password-submit,
+.cambio-password-submit:focus {
+    width: 188px;
+}
+
+.login-submit:hover,
+.solicitud-submit:hover,
+.cambio-password-submit:hover {
+    background: #5038ed !important;
+    background: linear-gradient(90deg,rgba(80, 56, 237, 1) 0%, rgba(145, 129, 244, 1) 100%) !important;
+    width: 153px;
+}
+
+.login-submit.rz-state-disabled {
+    width: auto;
+}
+
+.solicitud-submit:hover {
+    width: 170px;
+}
+
+.cambio-password-submit:hover {
+    width: 205px;
+}
+
+.signup-link,
+.login-link {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+}
+
+.signup-link {
+    margin-top: 1rem;
+}
+
+.dialog-2fa,
+.dialog-2fa .rz-dialog-titlebar {
+    background-color: #ffffff !important;
+}
+
+.dialog-2fa {
+    padding: 1rem;
+}
+
+.rz-form-field-content {
+    background-color: #F0EDFF !important;
+    border-radius: 1rem !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input.rz-form-field-content:-webkit-autofill,
+input.rz-form-field-content:-webkit-autofill:focus {
+    background-color: #F0EDFF !important;
+}
+
+.rz-form-field-label {
+    font-family: "Poppins-Regular" !important;
+    color: #1C1C1C !important;
+}
+
+.valid, .invalid {
+    margin: 0 0 0 0;
+    border-radius: 1rem;
+}
+
+.rz-form-field-content:before,
+.rz-form-field-content:after {
+    content: "";
+    display: none !important;
+}
+
+.rz-row {
+    gap: 0;
+    row-gap: 0;
+}
+
+.rz-alert .rz-alert-item {
+    align-items: center;
+}
+
+/* Esto oculta las flechas en la mayoría de navegadores */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield; /* Firefox */
+}
+
+.rz-alert-content {
+    word-break: break-word;
+}
+
+.rz-message.rz-messages-error {
+    text-align: left;
+}
+
+.rz-security-code.modified.valid,
+.rz-security-code.modified.invalid{
+    outline: none;
+}
+
+.rz-footer {
+    background-color: #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    width: 30%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    text-align: center;
+}
+
+.rz-footer .rz-text-caption {
+    font-family: "Poppins-Regular" !important;
+}

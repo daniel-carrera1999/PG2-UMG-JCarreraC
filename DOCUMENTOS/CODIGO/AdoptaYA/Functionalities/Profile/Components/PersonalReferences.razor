@@ -1,0 +1,23 @@
+﻿<Loader Loading="@loading" />
+
+@if (applicant == null || applicant.Id == 0)
+{
+    <RadzenStack Gap="1rem" class="rz-mt-2">
+        <RadzenText Text="No se encuentra registrado como solicitante" TextStyle="TextStyle.Body1" class="fw-bold" />
+    </RadzenStack>
+}
+else
+{
+    @if (!ShowUpdateReference)
+    {
+        <RadzenStack Gap="1rem" class="rz-mt-2">
+            <PersonalReferencesInfo applicant="@applicant" />
+            <RadzenButton Text="Actualizar información" Icon="edit" ButtonStyle="ButtonStyle.Primary"
+                          Click="@(() => ShowUpdateReference = true)" />
+        </RadzenStack>
+    }
+    else
+    {
+        <UpdatePersonalReferences OnReloadData="ReloadDataAsync" applicant="@applicant" />
+    }
+}

@@ -1,0 +1,57 @@
+﻿@page "/animales"
+
+@using AdoptaYA.Functionalities.Animals.Model
+
+<SessionValidator title="Animales" path="/animales">
+	<Loader Loading="@loading" />
+
+    <RadzenCard Class="rz-mb-4">
+        <RadzenTemplateForm TItem="Animal" Data="@newAnimal">
+            <RadzenRow Gap="1rem">
+                <RadzenColumn Size="12" SizeMD="3" class="rz-display-flex rz-align-items-center">
+                    <RadzenFormField Text="Especie" Variant="Variant.Outlined">
+                        <RadzenTextBox @bind-Value="@newAnimal.Species" Placeholder="Especie" />
+                    </RadzenFormField>
+                </RadzenColumn>
+
+                <RadzenColumn Size="12" SizeMD="3" class="rz-display-flex rz-align-items-center">
+                    <RadzenFormField Text="Raza" Variant="Variant.Outlined">
+                        <RadzenTextBox @bind-Value="@newAnimal.Breed" Placeholder="Raza" />
+                    </RadzenFormField>
+                </RadzenColumn>
+
+                <RadzenColumn Size="12" SizeMD="1" class="rz-display-flex rz-align-items-center">
+                    @if (!isEdit)
+                    {
+                        <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Primary" Icon="add" Click="@AddAnimalAsync" Disabled="@IsFormIncomplete" />
+                    }
+                    else
+                    {
+                        <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Primary" Icon="check_circle" Click="@UpdateAnimal" Disabled="@IsFormIncomplete" />
+                        <RadzenButton ButtonType="ButtonType.Button" ButtonStyle="ButtonStyle.Danger" Icon="cancel" Click="@CancelUpdate" class="rz-ms-1" />
+                    }
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenTemplateForm>
+    </RadzenCard>
+
+    <RadzenDataGrid Data="@animals" AllowPaging="true" PageSize="10" ColumnWidth="200px"
+                    AllowRowSelectOnRowClick="true" SelectionMode="DataGridSelectionMode.Single"
+                    FilterMode="FilterMode.CheckBoxList" AllowSorting="true" AllowFiltering="true"
+                    ApplyFilterText="Aplicar" ClearFilterText="Limpiar" EmptyText="No hay registros para mostrar">
+        <Columns>
+            <RadzenDataGridColumn Property="Id" Title="Id" Width="100px" />
+            <RadzenDataGridColumn Property="Species" Title="Especie" />
+            <RadzenDataGridColumn Property="Breed" Title="Raza" />
+            <RadzenDataGridColumn Filterable="false" Sortable="false" Width="140px">
+                <Template Context="item">
+                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                        <RadzenButton Click="@(() => SetUpdate(item))" Icon="edit" Size="ButtonSize.Medium" ButtonStyle="ButtonStyle.Warning" />
+                        <RadzenButton Click="@(() => DeleteAnimal(item))" Icon="delete" Size="ButtonSize.Medium" ButtonStyle="ButtonStyle.Danger" />
+                    </RadzenStack>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+
+</SessionValidator>
