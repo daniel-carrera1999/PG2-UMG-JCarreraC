@@ -1,6 +1,6 @@
-﻿@page "/mis_solicitudes"
+﻿@page "/adopciones"
 
-<SessionValidator title="Mis Solicitudes de Adopción" path="/mis_solicitudes">
+<SessionValidator title="Gestión de adopciones" path="/adopciones">
     <Loader Loading="loading" />
 
     <div class="mb-3 d-flex justify-content-end">
@@ -18,10 +18,10 @@
             <RadzenDataGridColumn Property="Breed" Title="Raza" />
             <RadzenDataGridColumn Property="Status" Title="Estado" />
             <RadzenDataGridColumn Property="Date" Title="Fecha solicitud" />
-            <RadzenDataGridColumn Width="60px" Filterable="false" Sortable="false" >
+            <RadzenDataGridColumn Width="60px" Filterable="false" Sortable="false">
                 <Template Context="data">
                     <RadzenButton Icon="expand_content" Click="@(() => OpenViewRequest(data.AdoptionId))"
-                        ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Button" />
+                                  ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Button" />
                 </Template>
             </RadzenDataGridColumn>
         </Columns>

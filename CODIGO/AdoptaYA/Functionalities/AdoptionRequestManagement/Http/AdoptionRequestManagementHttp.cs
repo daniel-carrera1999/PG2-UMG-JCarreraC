@@ -1,10 +1,11 @@
-﻿using System.Text.Json;
-using AdoptaYA.Functionalities.MyAdoptionRequests.Model;
+﻿using AdoptaYA.Functionalities.AdoptionRequestManagement.DTO;
+using AdoptaYA.Functionalities.AdoptionRequestManagement.Model;
 using AdoptaYA.Services.Dialogs;
 using AdoptaYA.Services.Http;
+using System.Text.Json;
 
-namespace AdoptaYA.Functionalities.MyAdoptionRequests.Http;
-public class MyAdoptionRequestHttp
+namespace AdoptaYA.Functionalities.AdoptionRequestManagement.Http;
+public class AdoptionRequestManagementHttp
 {
     private readonly ApiGetService _apiGetService;
     private readonly ApiPostService _apiPostServie;
@@ -12,11 +13,11 @@ public class MyAdoptionRequestHttp
     private readonly ApiPutService _apiPutService;
     private readonly CustomDialogService _customDialogService;
 
-    public MyAdoptionRequestHttp(ApiGetService apiGetService,
-                                 ApiPostService apiPostService,
-                                 ApiDeleteService apiDeleteService,
-                                 ApiPutService apiPutService,
-                                 CustomDialogService customDialogService)
+    public AdoptionRequestManagementHttp(ApiGetService apiGetService,
+                                         ApiPostService apiPostService,
+                                         ApiDeleteService apiDeleteService,
+                                         ApiPutService apiPutService,
+                                         CustomDialogService customDialogService)
     {
         _apiGetService = apiGetService;
         _apiPostServie = apiPostService;
@@ -25,22 +26,22 @@ public class MyAdoptionRequestHttp
         _customDialogService = customDialogService;
     }
 
-    public async Task<IList<AdoptionRequestResponse>> GetMyAdoptionRequest(int UserId)
+    public async Task<IList<AdoptionRequestView>> GetAllAdoptionRequest()
     {
         try
         {
-            var response = await _apiGetService.GetAsync($"adopcion/mis_solicitudes/{UserId}", "", 1, true);
+            var response = await _apiGetService.GetAsync("adopcion/todas_solicitudes", "", 1, true);
 
 
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
-                var data = JsonSerializer.Deserialize<IList<AdoptionRequestResponse>>(json, new JsonSerializerOptions
+                var data = JsonSerializer.Deserialize<IList<AdoptionRequestView>>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
 
-                return data ?? new List<AdoptionRequestResponse>();
+                return data ?? new List<AdoptionRequestView>();
 
             }
             else
@@ -53,25 +54,25 @@ public class MyAdoptionRequestHttp
             await _customDialogService.OpenInternalErrorAsync(e);
         }
 
-        return new List<AdoptionRequestResponse>();
+        return new List<AdoptionRequestView>();
     }
 
-    public async Task<AdoptionRequestDetailResponse> GetMyAdoptionRequestById(int RequestId)
+    public async Task<AdoptionRootResponse> GetAdoptionRequestDetail(int id)
     {
         try
         {
-            var response = await _apiGetService.GetAsync($"adopcion/detalle_solicitud/{RequestId}", "", 1, true);
+            var response = await _apiGetService.GetAsync($"adopcion/detalle_solicitud_management/{id}", "", 1, true);
 
 
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
-                var data = JsonSerializer.Deserialize<AdoptionRequestDetailResponse>(json, new JsonSerializerOptions
+                var data = JsonSerializer.Deserialize<AdoptionRootResponse>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
 
-                return data ?? new AdoptionRequestDetailResponse();
+                return data ?? new AdoptionRootResponse();
 
             }
             else
@@ -84,7 +85,7 @@ public class MyAdoptionRequestHttp
             await _customDialogService.OpenInternalErrorAsync(e);
         }
 
-        return new AdoptionRequestDetailResponse();
+        return new AdoptionRootResponse();
     }
 
 }

@@ -18,6 +18,8 @@ module.exports = (sequelize) => {
   Adopcion.associate = (models) => {
     Adopcion.belongsTo(models.solicitante, { foreignKey: 'id_solicitante' });
     Adopcion.belongsTo(models.mascota, { foreignKey: 'id_mascota' });
+    Adopcion.hasMany(models.seguimiento, { foreignKey: 'id_adopcion' });
+    Adopcion.hasMany(models.retorno, { foreignKey: 'id_adopcion' });
   };
 
   return Adopcion;

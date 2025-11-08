@@ -1,24 +1,21 @@
-using AdoptaYA.Functionalities.Log.Pages;
-using AdoptaYA.Functionalities.MyAdoptionRequests.Components;
-using AdoptaYA.Functionalities.MyAdoptionRequests.Http;
-using AdoptaYA.Functionalities.MyAdoptionRequests.Model;
-using AdoptaYA.Services.Security;
+using AdoptaYA.Functionalities.AdoptionRequestManagement.Components;
+using AdoptaYA.Functionalities.AdoptionRequestManagement.Http;
+using AdoptaYA.Functionalities.AdoptionRequestManagement.Model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Radzen;
 using System.Text;
 
-namespace AdoptaYA.Functionalities.MyAdoptionRequests.Pages;
-public partial class MyAdoptionRequestsList
+namespace AdoptaYA.Functionalities.AdoptionRequestManagement.Pages;
+public partial class AdoptionRequestManagementList
 {
-    [Inject] GetCurrentUser GetCurrentUser { get; set; } = default!;
-    [Inject] MyAdoptionRequestHttp MyAdoptionRequestHttp { get; set; } = default!;
+    [Inject] AdoptionRequestManagementHttp Http { get; set; } = default!;
     [Inject] IJSRuntime JS { get; set; } = default!;
     [Inject] DialogService DialogService { get; set; } = default!;
 
     private bool loading = false;
 
-    private IList<AdoptionRequestResponse> data = new List<AdoptionRequestResponse>();
+    private IList<AdoptionRequestView> data = new List<AdoptionRequestView>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -28,8 +25,7 @@ public partial class MyAdoptionRequestsList
     private async Task LoadDataAsync()
     {
         loading = true;
-        var user = await GetCurrentUser.GetUserInfoAsync();
-        data = await MyAdoptionRequestHttp.GetMyAdoptionRequest(user.UserId ?? 0);
+        data = await Http.GetAllAdoptionRequest();
         loading = false;
 
         StateHasChanged();
@@ -37,7 +33,7 @@ public partial class MyAdoptionRequestsList
 
     private async Task OpenViewRequest(int id)
     {
-        var response = await DialogService.OpenAsync<AdoptionRequestDetail>(
+        var response = await DialogService.OpenAsync<AdoptionRequestManage>(
             $"Solicitud ID: <strong>{id}</strong>",
             new Dictionary<string, object?>
             {
@@ -62,8 +58,9 @@ public partial class MyAdoptionRequestsList
 
         var bytes = Encoding.UTF8.GetBytes(csv.ToString());
         var base64 = Convert.ToBase64String(bytes);
-        var fileName = $"Mis solicitudes_{DateTime.Now:yyyyMMddHHmmss}.csv";
+        var fileName = $"Gestion de adopciones_{DateTime.Now:yyyyMMddHHmmss}.csv";
 
         await JS.InvokeVoidAsync("downloadFileFromBase64", fileName, "text/csv", base64);
     }
+
 }

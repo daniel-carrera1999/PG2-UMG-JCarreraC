@@ -1,4 +1,4 @@
-﻿@using AdoptaYA.Functionalities.MyAdoptionRequests.Model
+﻿@using AdoptaYA.Functionalities.AdoptionRequestManagement.DTO
 
 <Loader Loading="loading" />
 
@@ -246,15 +246,15 @@
                 </RadzenFieldset>
 
                 <RadzenFieldset Text="Vacunas" class="fw-bold">
-                    <RadzenDataGrid TItem="AdoptionRequestVacuna" Data="@data?.Pet?.Vaccines" EmptyText="No hay vacunas registradas" ShowPagingSummary="false" class="fw-normal" AllowPaging="false">
+                    <RadzenDataGrid TItem="VacunaResponse" Data="@data?.Pet?.Vaccines" EmptyText="No hay vacunas registradas" ShowPagingSummary="false" class="fw-normal" AllowPaging="false">
                         <Columns>
-                            <RadzenDataGridColumn TItem="AdoptionRequestVacuna" Property="Description" Title="Descripción" />
-                            <RadzenDataGridColumn TItem="AdoptionRequestVacuna" Title="Estado">
+                            <RadzenDataGridColumn TItem="VacunaResponse" Property="Description" Title="Descripción" />
+                            <RadzenDataGridColumn TItem="VacunaResponse" Title="Estado">
                                 <Template Context="vaccine">
                                     @(vaccine.Applied == 1 ? "Aplicada" : "No aplicada")
                                 </Template>
                             </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="AdoptionRequestVacuna" Title="Fecha aplicada">
+                            <RadzenDataGridColumn TItem="VacunaResponse" Title="Fecha aplicada">
                                 <Template Context="vaccine">
                                     @(vaccine.ApplicationDate.ToString("dd/MM/yyyy") ?? "Sin fecha")
                                 </Template>
@@ -264,11 +264,11 @@
                 </RadzenFieldset>
 
                 <RadzenFieldset Text="Enfermedades" class="fw-bold">
-                    <RadzenDataGrid TItem="AdoptionRequestEnfermedad" Data="@data?.Pet?.Diseases" ExpandMode="DataGridExpandMode.Single"
+                    <RadzenDataGrid TItem="EnfermedadResponse" Data="@data?.Pet?.Diseases" ExpandMode="DataGridExpandMode.Single"
                                     @ref="diseasesGrid" RowRender="@RowRenderDiseases" class="fw-normal" EmptyText="No hay enfermedades registradas" AllowPaging="false">
                         <Columns>
-                            <RadzenDataGridColumn TItem="AdoptionRequestEnfermedad" Property="Description" Title="Descripción" />
-                            <RadzenDataGridColumn TItem="AdoptionRequestEnfermedad" Property="Treatment" Title="Tratamiento">
+                            <RadzenDataGridColumn TItem="EnfermedadResponse" Property="Description" Title="Descripción" />
+                            <RadzenDataGridColumn TItem="EnfermedadResponse" Property="Treatment" Title="Tratamiento">
                                 <Template Context="disease">
                                     <RadzenText class="rz-m-0" Style="white-space: pre-wrap;">@disease.Treatment</RadzenText>
                                 </Template>
@@ -281,15 +281,49 @@
                                     Medicinas para @disease.Description
                                 </RadzenText>
 
-                                <RadzenDataGrid TItem="AdoptionRequestMedicina" Data="@disease.Medicines" AllowPaging="false" AllowSorting="false" EmptyText="No hay tratamientos registrados">
+                                <RadzenDataGrid TItem="MedicinaResponse" Data="@disease.Medicines" AllowPaging="false" AllowSorting="false" EmptyText="No hay tratamientos registrados">
                                     <Columns>
-                                        <RadzenDataGridColumn TItem="AdoptionRequestMedicina" Property="Name" Title="Nombre" />
-                                        <RadzenDataGridColumn TItem="AdoptionRequestMedicina" Property="Description" Title="Descripción" />
-                                        <RadzenDataGridColumn TItem="AdoptionRequestMedicina" Property="Indications" Title="Indicaciones" />
+                                        <RadzenDataGridColumn TItem="MedicinaResponse" Property="Name" Title="Nombre" />
+                                        <RadzenDataGridColumn TItem="MedicinaResponse" Property="Description" Title="Descripción" />
+                                        <RadzenDataGridColumn TItem="MedicinaResponse" Property="Indications" Title="Indicaciones" />
                                     </Columns>
                                 </RadzenDataGrid>
                             </RadzenCard>
                         </Template>
+                    </RadzenDataGrid>
+                </RadzenFieldset>
+
+                <RadzenFieldset Text="Seguimientos" class="fw-bold">
+                    <RadzenDataGrid TItem="SeguimientoResponse" Data="@data?.FollowUp" EmptyText="No hay seguimientos registrados" ShowPagingSummary="false" class="fw-normal" AllowPaging="false">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="SeguimientoResponse" Title="Fecha de Seguimiento">
+                                <Template Context="seguimiento">
+                                    @seguimiento.FollowUpDate?.ToString("dd/MM/yyyy")
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="SeguimientoResponse" Property="Observations" Title="Observaciones">
+                                <Template Context="seguimiento">
+                                    <RadzenText Style="white-space: pre-wrap;">@seguimiento.Observations</RadzenText>
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </RadzenDataGrid>
+                </RadzenFieldset>
+
+                <RadzenFieldset Text="Retornos" class="fw-bold">
+                    <RadzenDataGrid TItem="RetornoResponse" Data="@data?.ReturnPet" EmptyText="No hay retornos registrados" ShowPagingSummary="false" class="fw-normal" AllowPaging="false">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="RetornoResponse" Title="Fecha de Retorno">
+                                <Template Context="retorno">
+                                    @retorno.ReturnDate?.ToString("dd/MM/yyyy")
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="RetornoResponse" Property="Observations" Title="Observaciones">
+                                <Template Context="retorno">
+                                    <RadzenText Style="white-space: pre-wrap;">@retorno.Observations</RadzenText>
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
                     </RadzenDataGrid>
                 </RadzenFieldset>
             </RadzenStack>
