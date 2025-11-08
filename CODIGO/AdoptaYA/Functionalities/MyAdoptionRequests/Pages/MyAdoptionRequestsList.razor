@@ -1,0 +1,24 @@
+﻿@page "/mis_solicitudes"
+
+<SessionValidator title="Mis Solicitudes de Adopción" path="/mis_solicitudes">
+    <Loader Loading="loading" />
+
+    <div class="mb-3 d-flex justify-content-end">
+        <RadzenButton Icon="download" Text="Exportar CSV" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Small" Click="@ExportToCsv" />
+    </div>
+
+    <RadzenDataGrid Data="@data" AllowPaging="true" PageSize="10" ColumnWidth="200px"
+                    AllowRowSelectOnRowClick="true" SelectionMode="DataGridSelectionMode.Single"
+                    FilterMode="FilterMode.CheckBoxList" AllowSorting="true" AllowFiltering="true"
+                    ApplyFilterText="Aplicar" ClearFilterText="Limpiar" EmptyText="No hay registros para mostrar">
+        <Columns>
+            <RadzenDataGridColumn Property="AdoptionId" Title="Id" Width="100px" />
+            <RadzenDataGridColumn Property="Name" Title="Nombre" />
+            <RadzenDataGridColumn Property="Species" Title="Especie" />
+            <RadzenDataGridColumn Property="Breed" Title="Raza" />
+            <RadzenDataGridColumn Property="Status" Title="Estado" />
+            <RadzenDataGridColumn Property="Date" Title="Fecha solicitud" />
+        </Columns>
+    </RadzenDataGrid>
+
+</SessionValidator>

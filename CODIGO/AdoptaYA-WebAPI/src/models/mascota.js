@@ -16,13 +16,15 @@ module.exports = (sequelize) => {
     id_animal:         { type: DataTypes.INTEGER.UNSIGNED, allowNull: false }
   }, {
     tableName: 'mascota',
-    timestamps: false
+    timestamps: false,
+    freezeTableName: true
   });
 
   Mascota.associate = (models) => {
     Mascota.belongsTo(models.animal, { foreignKey: 'id_animal' });
     Mascota.hasMany(models.enfermedad, { foreignKey: 'id_mascota' });
     Mascota.hasMany(models.vacuna, { foreignKey: 'id_mascota' });
+    Mascota.hasMany(models.adopcion, { foreignKey: 'id_mascota' });
   };
 
   return Mascota;

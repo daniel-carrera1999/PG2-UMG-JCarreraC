@@ -1,0 +1,162 @@
+﻿@using AdoptaYA.Functionalities.Pets.Model
+
+<Loader Loading="@loading" />
+
+<RadzenStack Gap="1rem" class="rz-p-0 rz-p-lg-4">
+    <RadzenRow Gap="2rem">
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenStack>
+                <RadzenFieldset Text="Información de la Mascota" class="fw-bold">
+                    <RadzenStack Gap="1rem">
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Tipo de Animal" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenText>@(animals.FirstOrDefault(a => a.Id == pet.IdAnimal)?.DisplayName ?? "N/A")</RadzenText>
+                            </RadzenColumn>
+                        </RadzenRow>
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Nombre" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenText>@pet.Name</RadzenText>
+                            </RadzenColumn>
+                        </RadzenRow>
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Tamaño" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenText>@pet.Size</RadzenText>
+                            </RadzenColumn>
+                        </RadzenRow>
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Peso (kg)" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenText>@pet.Weight</RadzenText>
+                            </RadzenColumn>
+                        </RadzenRow>
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Color" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenText>@pet.color</RadzenText>
+                            </RadzenColumn>
+                        </RadzenRow>
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12" SizeMD="4">
+                                <RadzenLabel Text="Comportamiento" />
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="8">
+                                <RadzenText Style="white-space: pre-wrap;">@pet.Behavior</RadzenText>
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenStack>
+                </RadzenFieldset>
+
+                <RadzenFieldset Text="Fotografías" class="fw-bold">
+                    <RadzenStack Gap="1rem">
+                        <RadzenCarousel Auto="true" AllowNavigation="@true"
+                                        Style="height: 400px; max-width: 400px;" class="rz-mx-auto"
+                                        ButtonStyle="ButtonStyle.Light" ButtonSize="ButtonSize.Medium" ButtonShade="Shade.Default" ButtonVariant="Variant.Flat">
+                            <Items>
+                                @if (!string.IsNullOrEmpty(photos.principal_photo))
+                                {
+                                    <RadzenCarouselItem>
+                                        <RadzenImage Path="@photos.principal_photo" Style="width: 100%; height: 100%; object-fit: contain;" />
+                                    </RadzenCarouselItem>
+                                }
+                                @if (!string.IsNullOrEmpty(photos.secundary_photo))
+                                {
+                                    <RadzenCarouselItem>
+                                        <RadzenImage Path="@photos.secundary_photo" Style="width: 100%; height: 100%; object-fit: contain;" />
+                                    </RadzenCarouselItem>
+                                }
+                                @if (!string.IsNullOrEmpty(photos.additional_photo))
+                                {
+                                    <RadzenCarouselItem>
+                                        <RadzenImage Path="@photos.additional_photo" Style="width: 100%; height: 100%; object-fit: contain;" />
+                                    </RadzenCarouselItem>
+                                }
+                            </Items>
+                        </RadzenCarousel>
+                    </RadzenStack>
+                </RadzenFieldset>
+            </RadzenStack>
+        </RadzenColumn>
+
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenStack>
+                <RadzenFieldset Text="Vacunas" class="fw-bold">
+                    <RadzenDataGrid TItem="VacunaResponseDTO" Data="@pet.Vaccines" EmptyText="No hay vacunas registradas" ShowPagingSummary="false" class="fw-normal">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="VacunaResponseDTO" Title="Descripción">
+                                <Template Context="vaccine">
+                                    @vaccine.Description
+                                </Template>
+                            </RadzenDataGridColumn>
+
+                            <RadzenDataGridColumn TItem="VacunaResponseDTO" Title="Estado">
+                                <Template Context="vaccine">
+                                    @(vaccine.Applied == 1 ? "Aplicada" : "No aplicada")
+                                </Template>
+                            </RadzenDataGridColumn>
+
+                            <RadzenDataGridColumn TItem="VacunaResponseDTO" Title="Fecha aplicada">
+                                <Template Context="vaccine">
+                                    @(vaccine.DateApplied.HasValue
+                                        ? vaccine.DateApplied.Value.ToString("dd/MM/yyyy")
+                                        : "Sin fecha")
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </RadzenDataGrid>
+
+                </RadzenFieldset>
+
+                <RadzenFieldset Text="Enfermedades" class="fw-bold">
+                    <RadzenDataGrid TItem="EnfermedadResponseDTO" Data="@pet.Diseases" ExpandMode="DataGridExpandMode.Single"
+                                    @ref="diseasesGrid" RowRender="@RowRenderDiseases" class="fw-normal" EmptyText="No hay enfermedades registradas">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="EnfermedadResponseDTO" Property="Description" Title="Descripción" />
+                            <RadzenDataGridColumn TItem="EnfermedadResponseDTO" Property="Treatment" Title="Tratamiento">
+                                <Template Context="d">
+                                    <RadzenText Style="white-space: pre-wrap;">@d.Treatment</RadzenText>
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+
+                        <Template Context="disease">
+                            <RadzenCard Variant="Variant.Outlined" Style="margin: 1rem;">
+                                <RadzenText TextStyle="TextStyle.Subtitle2" class="fw-bold rz-mb-2">
+                                    Medicinas para @disease.Description
+                                </RadzenText>
+
+                                <RadzenDataGrid TItem="MedicinaResponseDTO" Data="@disease.Medications" AllowPaging="false" AllowSorting="false" EmptyText="No hay tratamientos registrados">
+                                    <Columns>
+                                        <RadzenDataGridColumn TItem="MedicinaResponseDTO" Property="Name" Title="Nombre" />
+                                        <RadzenDataGridColumn TItem="MedicinaResponseDTO" Property="Description" Title="Descripción" />
+                                        <RadzenDataGridColumn TItem="MedicinaResponseDTO" Property="Indications" Title="Indicaciones" />
+                                    </Columns>
+                                </RadzenDataGrid>
+                            </RadzenCard>
+                        </Template>
+                    </RadzenDataGrid>
+
+                </RadzenFieldset>
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem">
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat"
+                      Size="ButtonSize.Large" Icon="arrow_back" Text="Cerrar" Click="@Close" />
+        <RadzenButton ButtonType="ButtonType.Button" Size="ButtonSize.Large"
+                      Icon="volunteer_activism" Text="Adoptar" Click="@AdoptPet" />
+    </RadzenStack>
+</RadzenStack>

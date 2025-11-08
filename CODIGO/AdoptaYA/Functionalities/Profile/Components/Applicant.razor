@@ -1,0 +1,39 @@
+﻿@if (applicant == null || applicant.Id == 0)
+{
+    @if (!ShowCreateApplicant)
+    {
+        <div class="d-flex flex-column justify-content-center align-items-center p-4">
+            <RadzenCard Style="max-width: 450px; text-align: center;">
+                <RadzenIcon Icon="person_add" Style="font-size: 48px; color: var(--rz-secondary);" />
+                <RadzenText Text="Aún no estás registrado como solicitante"
+                            TextStyle="TextStyle.H6"
+                            class="text-muted fw-semibold d-block mt-2" />
+                <RadzenText Text="Completa tu registro para poder realizar solicitudes de adopción."
+                            TextStyle="TextStyle.Body2"
+                            class="text-secondary d-block mb-3" />
+                <RadzenButton Text="Registrar como Solicitante"
+                              Icon="add_circle_outline"
+                              ButtonStyle="ButtonStyle.Primary"
+                              Size="ButtonSize.Medium"
+                              Click="@(() => ShowCreateApplicant = true)" />
+            </RadzenCard>
+        </div>
+    }
+    else
+    {
+        <AddApplicantInfo OnReloadData="ReloadDataAsync" />
+    }
+}
+else
+{
+    @if (!ShowUpdateApplicant)
+    {
+        <RadzenStack Gap="1rem" class="rz-mt-2">
+            <ApplicantInfo applicant="@applicant" />
+            <RadzenButton Text="Actualizar información" Icon="edit" ButtonStyle="ButtonStyle.Primary"
+                          Click="@(() => ShowUpdateApplicant = true)" />
+        </RadzenStack>
+    } else {
+        <UpdateApplicationInfo OnReloadData="ReloadDataAsync" applicant="@applicant" />
+    }
+}

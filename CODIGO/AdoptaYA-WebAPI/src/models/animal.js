@@ -8,10 +8,12 @@ module.exports = (sequelize) => {
     date:       { type: DataTypes.DATE, allowNull: true, defaultValue: DataTypes.NOW },
     inactive:   { type: DataTypes.TINYINT(1), allowNull: true, defaultValue: 0 }
   }, {
-    tableName: 'animal'
+    tableName: 'animal',
+    timestamps: false
   });
 
   animal.associate = (models) => {
+    animal.hasMany(models.mascota, { foreignKey: 'id_animal' })
   };
 
   return animal;

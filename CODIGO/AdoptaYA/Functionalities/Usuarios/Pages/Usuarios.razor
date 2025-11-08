@@ -3,6 +3,10 @@
 <SessionValidator title="Usuarios" path="/usuarios">
     <Loader Loading="loading" />
 
+    <div class="mb-3 d-flex justify-content-end">
+        <RadzenButton Icon="download" Text="Exportar CSV" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Small" Click="@ExportToCsv" />
+    </div>
+
     <RadzenDataGrid Data="@users" AllowPaging="true" PageSize="10" ColumnWidth="200px"
                     AllowRowSelectOnRowClick="true" SelectionMode="DataGridSelectionMode.Single"
                     FilterMode="FilterMode.CheckBoxList" AllowSorting="true" AllowFiltering="true"

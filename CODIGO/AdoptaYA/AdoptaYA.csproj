@@ -24,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Functionalities\AdoptionRequestManagement\Http\" />
+    <Folder Include="Functionalities\AdoptionRequestManagement\Model\" />
+    <Folder Include="Functionalities\AdoptionRequestManagement\Components\" />
+    <Folder Include="Functionalities\AdoptionRequestManagement\Pages\" />
     <Folder Include="Lib\" />
     <Folder Include="wwwroot\fonts\" />
   </ItemGroup>

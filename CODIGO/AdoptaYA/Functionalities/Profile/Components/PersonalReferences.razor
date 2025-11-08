@@ -1,0 +1,31 @@
+﻿<Loader Loading="@loading" />
+
+@if (applicant == null || applicant.Id == 0)
+{
+    <div class="d-flex flex-column justify-content-center align-items-center p-4">
+        <RadzenCard Style="max-width: 450px; text-align: center;">
+            <RadzenIcon Icon="lock_person" Style="font-size: 48px; color: var(--rz-secondary);" />
+            <RadzenText Text="No puedes registrar tus referencias personales"
+                        TextStyle="TextStyle.H6"
+                        class="text-muted fw-semibold d-block mt-2" />
+            <RadzenText Text="Debes estar registrado como solicitante antes de agregar tus referencias."
+                        TextStyle="TextStyle.Body2"
+                        class="text-secondary d-block mb-3" />
+        </RadzenCard>
+    </div>
+}
+else
+{
+    @if (!ShowUpdateReference)
+    {
+        <RadzenStack Gap="1rem" class="rz-mt-2">
+            <PersonalReferencesInfo applicant="@applicant" />
+            <RadzenButton Text="Actualizar información" Icon="edit" ButtonStyle="ButtonStyle.Primary"
+                          Click="@(() => ShowUpdateReference = true)" />
+        </RadzenStack>
+    }
+    else
+    {
+        <UpdatePersonalReferences OnReloadData="ReloadDataAsync" applicant="@applicant" />
+    }
+}

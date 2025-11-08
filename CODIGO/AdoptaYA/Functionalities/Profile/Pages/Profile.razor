@@ -1,0 +1,20 @@
+﻿@page "/mi_perfil"
+
+<SessionValidator title="Mi perfil" path="/mi_perfil">
+    <Loader Loading="@loading" />
+
+    <RadzenTabs @ref="tabs" RenderMode="TabRenderMode.Client" @bind-SelectedIndex=@selectedIndex>
+        <Tabs>
+            <RadzenTabsItem Text="Información de usuario">
+                <AdoptaYA.Functionalities.Profile.Components.ProfileInfo profile="@profile" />
+            </RadzenTabsItem>
+            <RadzenTabsItem Text="Información de solicitante">
+                <AdoptaYA.Functionalities.Profile.Components.Applicant OnReloadDataProfile="ReloadDataAsync" />
+            </RadzenTabsItem>
+            <RadzenTabsItem Text="Referencias personales">
+                <AdoptaYA.Functionalities.Profile.Components.PersonalReferences @ref="PersonalReferencesRef" />
+            </RadzenTabsItem>
+        </Tabs>
+    </RadzenTabs>
+    
+</SessionValidator>

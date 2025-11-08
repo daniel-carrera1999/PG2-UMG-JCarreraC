@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.Json;
+using AdoptaYA.Components.Pages;
 using AdoptaYA.Functionalities.Authentication.Model.Session;
 using AdoptaYA.Shared.Model;
 using AdoptaYA.Shared.Record;
@@ -93,36 +94,41 @@ public class GetCurrentUser
         return new AuthTokenResult(_accessToken, _exp, _refreshToken, _expRefreshToken);
     }
 
-    public async Task<AuthUserInfoResult> GetUserInfoAsync()
+    public async Task<AuthUserInfo> GetUserInfoAsync()
     {
         var authState = await _authProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
         if (!user.Identity?.IsAuthenticated ?? true)
         {
-            return new AuthUserInfoResult(null, null, null, null, null, null, null, null);
+            return new AuthUserInfo(null, null, null, null, null);
         }
 
         var jwtToken = user.FindFirstValue("AccessToken");
         var handler = new JwtSecurityTokenHandler();
         var accessToken = handler.ReadJwtToken(jwtToken);
+
         var userIdClaim = accessToken.Claims.FirstOrDefault(c => c.Type == "UserId");
 
         int _userId = 0;
-        if (userIdClaim != null && int.TryParse(userIdClaim.Value, out var parsedId))
+
+        // intenta obtener el campo directamente del payload
+        if (accessToken.Payload.TryGetValue("UserId", out var userIdValue) ||
+            accessToken.Payload.TryGetValue("sub", out userIdValue) ||
+            accessToken.Payload.TryGetValue("uid", out userIdValue))
         {
-            _userId = parsedId;
+            if (int.TryParse(userIdValue?.ToString(), out var parsedId))
+            {
+                _userId = parsedId;
+            }
         }
 
-        int _employeeCode = int.TryParse(user.FindFirstValue("EmployeeCode"), out int code) ? code : 0;
-        string _name = user.FindFirstValue("name")!;
-        string _emailAddress = user.FindFirstValue("emailaddress")!;
-        string _role = user.FindFirstValue("role")!;
-        int _locationId = int.TryParse(user.FindFirstValue("LocationId"), out int locId) ? locId : 0;
-        int _storeId = int.TryParse(user.FindFirstValue("StoreId"), out int storeId) ? storeId : 0;
-        string _store = user.FindFirstValue("store")!;
+        string _username = user.FindFirstValue("Username")!;
+        string _name = user.FindFirstValue(ClaimTypes.Name)!;
+        string _emailAddress = user.FindFirstValue(ClaimTypes.Email)!;
+        string _role = user.FindFirstValue(ClaimTypes.Role)!;
 
-        return new AuthUserInfoResult(_employeeCode, _userId, _name, _emailAddress, _role, _locationId, _storeId, _store);
+        return new AuthUserInfo(_userId, _username, _name, _emailAddress, _role);
 
     }
 

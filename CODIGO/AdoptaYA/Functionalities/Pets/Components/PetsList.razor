@@ -2,16 +2,32 @@
 
 <Loader Loading="@loading" />
 
-<RadzenDataList WrapItems="true" AllowPaging="true" Data="@pets" TItem="PetsView">
-    <Template Context="pet">
-        <RadzenCard Style="flex: 1; cursor: pointer;" @onclick="@(() => OpenViewPet(pet.Id))">
-            <RadzenStack AlignItems="AlignItems.Center" Gap="1rem">
-                <RadzenImage Path="@pet.PrincipalPhoto" Style="width: 80px; height: 80px; border-radius: 50%" AlternateText="@pet.Name" />
-                <RadzenStack Gap="0">
-                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.P" TextAlign="TextAlign.Center">@pet.Name</RadzenText>
-                    <RadzenText TextStyle="TextStyle.Body2" TextAlign="TextAlign.Center">@($"{pet.Animal!.Species} - {pet.Animal!.Breed}")</RadzenText>
-                </RadzenStack>
-            </RadzenStack>
+@if (pets == null || !pets.Any() || pets.Count == 0)
+{
+    <div class="d-flex justify-content-center align-items-center p-4">
+        <RadzenCard Style="max-width: 400px; text-align: center;">
+            <RadzenIcon Icon="inventory_2" Style="font-size: 48px; color: var(--rz-secondary);" />
+            <h5 class="mt-3 text-muted">Aún no se ha registrado ninguna mascota</h5>
+            <p class="text-secondary">Usa el botón <strong>“Registrar Mascota”</strong> para registrar la primera.</p>
         </RadzenCard>
-    </Template>
-</RadzenDataList>
+    </div>
+}
+else
+{
+    <div class="mb-3 d-flex justify-content-end">
+        <RadzenButton Icon="download" Text="Exportar CSV" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Small" Click="@ExportToCsv" />
+    </div>
+    <RadzenDataList WrapItems="true" AllowPaging="true" Data="@pets" TItem="PetsView">
+        <Template Context="pet">
+            <RadzenCard Style="flex: 1; cursor: pointer;" @onclick="@(() => OpenViewPet(pet.Id))">
+                <RadzenStack AlignItems="AlignItems.Center" Gap="1rem">
+                    <RadzenImage Path="@pet.PrincipalPhoto" Style="width: 80px; height: 80px; border-radius: 50%" AlternateText="@pet.Name" />
+                    <RadzenStack Gap="0">
+                        <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.P" TextAlign="TextAlign.Center">@pet.Name</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body2" TextAlign="TextAlign.Center">@($"{pet.Animal!.Species} - {pet.Animal!.Breed}")</RadzenText>
+                    </RadzenStack>
+                </RadzenStack>
+            </RadzenCard>
+        </Template>
+    </RadzenDataList>
+}

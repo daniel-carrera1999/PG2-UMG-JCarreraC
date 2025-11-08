@@ -1,0 +1,55 @@
+﻿<RadzenText TextStyle="TextStyle.H5" class="fw-bold rz-mb-1">Perfil del Usuario</RadzenText>
+
+<RadzenRow>
+    <RadzenColumn Size="12" SizeMD="6">
+        <RadzenLabel Text="Nombre de usuario:" class="fw-bold" />
+        <RadzenText Text="@profile.Username" />
+    </RadzenColumn>
+    <RadzenColumn Size="12" SizeMD="6">
+        <RadzenLabel Text="Correo electrónico:" class="fw-bold" />
+        <RadzenText Text="@profile.Email" />
+    </RadzenColumn>
+</RadzenRow>
+
+<RadzenRow>
+    <RadzenColumn Size="12" SizeMD="6">
+        <RadzenLabel Text="Nombre:" class="fw-bold" />
+        <RadzenText Text="@profile.Name" />
+    </RadzenColumn>
+    <RadzenColumn Size="12" SizeMD="6">
+        <RadzenLabel Text="Apellido:" class="fw-bold" />
+        <RadzenText Text="@profile.LastName" />
+    </RadzenColumn>
+</RadzenRow>
+
+<RadzenRow>
+    <RadzenColumn Size="12" SizeMD="6">
+        <RadzenLabel Text="Fecha de registro:" class="fw-bold" />
+        <RadzenText Text="@profile.Date.ToString("dd/MM/yyyy")" />
+    </RadzenColumn>
+    <RadzenColumn Size="12" SizeMD="6">
+        <RadzenLabel Text="Estado:" class="fw-bold" />
+        <br />
+        <RadzenBadge Text="@(profile.Inactive == 0 ? "Activo" : "Inactivo")"
+                     BadgeStyle="@(profile.Inactive == 0 ? BadgeStyle.Success : BadgeStyle.Danger)" />
+    </RadzenColumn>
+</RadzenRow>
+
+@if (profile.rol != null)
+{
+    <RadzenCard Variant="Variant.Flat" Shade="Shade.Lighter" Style="margin-top: 1rem;">
+        <RadzenStack Gap="0.5rem">
+            <RadzenText TextStyle="TextStyle.H6" class="fw-bold">Rol del Usuario</RadzenText>
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeMD="6">
+                    <RadzenLabel Text="Nombre del rol:" class="fw-bold" />
+                    <RadzenText Text="@profile.rol.Name" />
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="6">
+                    <RadzenLabel Text="Descripción:" class="fw-bold" />
+                    <RadzenText Text="@profile.rol.Description" />
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenStack>
+    </RadzenCard>
+}

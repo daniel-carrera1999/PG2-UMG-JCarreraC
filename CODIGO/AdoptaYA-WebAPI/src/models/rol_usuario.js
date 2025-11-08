@@ -8,6 +8,5 @@ module.exports = (sequelize) => {
     tableName: 'rol_usuario'
   });
 
-  // Tabla pivote: no necesita asociaciones propias si ya se definen en usuario/rol
   return rol_usuario;
 };

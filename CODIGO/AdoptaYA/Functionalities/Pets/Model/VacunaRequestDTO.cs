@@ -10,5 +10,5 @@ public class VacunaRequestDTO
     public int? Applied { get; set; } = 0;
 
     [JsonPropertyName("fecha_aplicacion")]
-    public DateTime? DateApplied { get; set; }
+    public DateOnly? DateApplied { get; set; }
 }

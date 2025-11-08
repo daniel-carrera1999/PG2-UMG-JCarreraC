@@ -8,5 +8,9 @@ router.use('/rol_usuario', require('./rol_usuario.routes'));
 router.use('/auth', require('./auth.routes'));
 router.use('/animal', require('./animal.routes'));
 router.use('/mascota', require('./mascota.routes'));
+router.use('/solicitante', require('./solicitante.routes'));
+router.use('/referencia_personal', require('./referencia_personal.routes'));
+router.use('/adopcion', require('./adopcion.routes'));
+router.use('/bitacora', require('./bitacora.routes'));
 
 module.exports = router;

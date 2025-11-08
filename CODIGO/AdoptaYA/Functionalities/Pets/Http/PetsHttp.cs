@@ -60,7 +60,7 @@ public class PetsHttp
         return new List<PetsView>();
     }
 
-    public async Task<MascotaRequestDTO> GetPetAsync(int id)
+    public async Task<MascotaResponseDTO> GetPetAsync(int id)
     {
         try
         {
@@ -69,12 +69,12 @@ public class PetsHttp
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
-                var data = JsonSerializer.Deserialize<MascotaRequestDTO>(json, new JsonSerializerOptions
+                var data = JsonSerializer.Deserialize<MascotaResponseDTO>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
 
-                return data ?? new MascotaRequestDTO();
+                return data ?? new MascotaResponseDTO();
 
             }
             else
@@ -87,14 +87,15 @@ public class PetsHttp
             await _customDialogService.OpenInternalErrorAsync(e);
         }
 
-        return new MascotaRequestDTO();
+        return new MascotaResponseDTO();
     }
 
-    public async Task<PetPhotosView> GetPrincipalPhoto(int id)
+    public async Task<PetPhotosView> GetPetPhotos(int id, bool all)
     {
         try
         {
-            var response = await _apiGetService.GetAsync($"mascota/{id}/photos/true", "", 1, false);
+            var allPhotos = all ? "true" : "false";
+            var response = await _apiGetService.GetAsync($"mascota/{id}/photos/{allPhotos}", "", 1, false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -154,11 +155,29 @@ public class PetsHttp
     {
         try
         {
-            _addPetLogger.LogWarning(JsonSerializer.Serialize(pet, new JsonSerializerOptions
+            var response = await _apiPostService.PostAsync("mascota", pet, 1, false);
+
+            if (response.IsSuccessStatusCode)
             {
-                WriteIndented = true
-            }));
-            var response = await _apiPostService.PostAsync("mascota", pet, 1, true);
+                return true;
+            }
+            else
+            {
+                await _customDialogService.OpenViewErrorsAsync(response);
+            }
+        }
+        catch (Exception e)
+        {
+            await _customDialogService.OpenInternalErrorAsync(e);
+        }
+        return false;
+    }
+
+    public async Task<bool> UpdatePet(int id, MascotaRequestDTO pet)
+    {
+        try
+        {
+            var response = await _apiPutService.PutAsync($"mascota/{id}", pet, 1, false);
 
             if (response.IsSuccessStatusCode)
             {
