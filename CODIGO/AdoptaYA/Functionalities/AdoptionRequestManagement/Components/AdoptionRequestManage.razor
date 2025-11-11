@@ -22,8 +22,34 @@
                                 <RadzenLabel Text="Estado" class="fw-bold" />
                             </RadzenColumn>
                             <RadzenColumn Size="12" SizeMD="8">
-                                <RadzenBadge BadgeStyle="@(data?.Adoption?.Status == "Cancelada" ? BadgeStyle.Danger : BadgeStyle.Success)"
-                                             Text="@data?.Adoption?.Status" />
+                                @if (!isEditingStatus)
+                                {
+                                    <div class="d-flex align-items-center gap-2">
+                                        <RadzenBadge BadgeStyle="@(data?.Adoption?.Status == "Cancelada" ? BadgeStyle.Danger : BadgeStyle.Success)"
+                                                     Text="@data?.Adoption?.Status" />
+                                        <RadzenButton Icon="edit"
+                                                      ButtonStyle="ButtonStyle.Light"
+                                                      Size="ButtonSize.Small"
+                                                      Click="@StartEditStatus"
+                                                      Visible="!applicationCompleted" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="d-flex align-items-center gap-2">
+                                        <RadzenDropDown @bind-Value="@selectedStatus"
+                                                        Data="@statusList"
+                                                        Style="width: 200px;" />
+                                        <RadzenButton Icon="check"
+                                                      ButtonStyle="ButtonStyle.Success"
+                                                      Size="ButtonSize.Small"
+                                                      Click="@SaveStatus" />
+                                        <RadzenButton Icon="close"
+                                                      ButtonStyle="ButtonStyle.Danger"
+                                                      Size="ButtonSize.Small"
+                                                      Click="@CancelEditStatus" />
+                                    </div>
+                                }
                             </RadzenColumn>
                         </RadzenRow>
                         <RadzenRow AlignItems="AlignItems.Center">
@@ -303,15 +329,17 @@
                             </RadzenDataGridColumn>
                             <RadzenDataGridColumn TItem="SeguimientoResponse" Property="Observations" Title="Observaciones">
                                 <Template Context="seguimiento">
-                                    <RadzenText Style="white-space: pre-wrap;">@seguimiento.Observations</RadzenText>
+                                    <RadzenText Style="white-space: pre-wrap; font-size: 0.8rem;" class="rz-m-0 lh-1" >@seguimiento.Observations</RadzenText>
                                 </Template>
                             </RadzenDataGridColumn>
                         </Columns>
                     </RadzenDataGrid>
+                    <RadzenButton Icon="add" Text="Agregar seguimiento" Click="@(() => OpenAddAdoptionFollowUp(data!.Adoption!.Id))"
+                                  ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Small" class="mt-3 float-end" Visible="!applicationCompleted" />
                 </RadzenFieldset>
 
-                <RadzenFieldset Text="Retornos" class="fw-bold">
-                    <RadzenDataGrid TItem="RetornoResponse" Data="@data?.ReturnPet" EmptyText="No hay retornos registrados" ShowPagingSummary="false" class="fw-normal" AllowPaging="false">
+                <RadzenFieldset Text="Retorno" class="fw-bold">
+                    <RadzenDataGrid TItem="RetornoResponse" Data="@data?.ReturnPet" EmptyText="No hay retorno registrado" ShowPagingSummary="false" class="fw-normal" AllowPaging="false">
                         <Columns>
                             <RadzenDataGridColumn TItem="RetornoResponse" Title="Fecha de Retorno">
                                 <Template Context="retorno">
@@ -320,11 +348,13 @@
                             </RadzenDataGridColumn>
                             <RadzenDataGridColumn TItem="RetornoResponse" Property="Observations" Title="Observaciones">
                                 <Template Context="retorno">
-                                    <RadzenText Style="white-space: pre-wrap;">@retorno.Observations</RadzenText>
+                                    <RadzenText Style="white-space: pre-wrap; font-size: 0.8rem;" class="rz-m-0 lh-1">@retorno.Observations</RadzenText>
                                 </Template>
                             </RadzenDataGridColumn>
                         </Columns>
                     </RadzenDataGrid>
+                    <RadzenButton Icon="add" Text="Agregar retorno" Click="@(() => OpenAddAdoptionReturn(data!.Adoption!.Id))"
+                                  ButtonStyle="ButtonStyle.Danger" Size="ButtonSize.Small" class="mt-3 float-end" Visible="@( (data?.ReturnPet == null || !data.ReturnPet.Any()) && !applicationCompleted )" />
                 </RadzenFieldset>
             </RadzenStack>
         </RadzenColumn>

@@ -729,3 +729,300 @@ exports.getDetalleAdopcionManagement = async (req, res) => {
     });
   }
 };
+
+exports.updateStatus = async (req, res, next) => {
+  const { id } = req.params; // ID de la adopción desde la URL
+  const { status, id_usuario } = req.body; // Nuevo status y usuario que realiza la acción
+
+  // Validar campos requeridos
+  const errors = {};
+  
+  if (!status) errors.status = ['El campo status es requerido'];
+  if (!id_usuario) errors.id_usuario = ['El campo id_usuario es requerido'];
+
+  if (Object.keys(errors).length > 0) {
+    return res.status(406).json({
+      type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1',
+      title: 'Uno o más errores de validación ocurrieron.',
+      status: 406,
+      detail: 'Por favor revise los errores',
+      datetime: new Date().toISOString(),
+      instance: req.originalUrl,
+      errors
+    });
+  }
+
+  // Validar que el status sea válido
+  const statusValidos = ['Pendiente', 'En Proceso', 'Aprobada', 'Completada', 'Cancelada', 'En Seguimiento'];
+  if (!statusValidos.includes(status)) {
+    return res.status(406).json({
+      type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1',
+      title: 'Uno o más errores de validación ocurrieron.',
+      status: 406,
+      detail: 'El status proporcionado no es válido',
+      datetime: new Date().toISOString(),
+      instance: req.originalUrl,
+      errors: {
+        status: [`El status debe ser uno de los siguientes: ${statusValidos.join(', ')}`]
+      }
+    });
+  }
+
+  const transaction = await sequelize.transaction();
+
+  try {
+    // Buscar la adopción
+    const adopcionExistente = await adopcion.findByPk(id, { transaction });
+
+    if (!adopcionExistente) {
+      await transaction.rollback();
+      return res.status(406).json({
+        type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1',
+        title: 'Uno o más errores de validación ocurrieron.',
+        status: 406,
+        detail: 'La adopción no existe',
+        datetime: new Date().toISOString(),
+        instance: req.originalUrl,
+        errors: {
+          id: ['La adopción especificada no existe']
+        }
+      });
+    }
+
+    // Guardar el status anterior para la bitácora
+    const statusAnterior = adopcionExistente.status;
+
+    // Actualizar el status
+    await adopcionExistente.update({ status }, { transaction });
+
+    // Registrar en bitácora
+    await registrarBitacora({
+      tabla: 'adopcion',
+      accion: 'UPDATE',
+      datos: {
+        id: adopcionExistente.id,
+        campo: 'status',
+        valor_anterior: statusAnterior,
+        valor_nuevo: status
+      },
+      id_usuario,
+      transaction
+    });
+
+    await transaction.commit();
+
+    res.status(200).json(adopcionExistente);
+
+  } catch (e) {
+    await transaction.rollback();
+    
+    // Error genérico del servidor
+    res.status(500).json({
+      type: 'https://tools.ietf.org/html/rfc7231#section-6.6.1',
+      title: 'Ocurrió un error al procesar su solicitud.',
+      status: 500,
+      detail: e.message || 'Error interno del servidor',
+      datetime: new Date().toISOString(),
+      instance: req.originalUrl,
+      errors: {}
+    });
+  }
+};
+
+exports.createFollowUp = async (req, res, next) => {
+  const { fecha_seguimiento, observaciones, id_adopcion, id_usuario } = req.body;
+
+  // Validar campos requeridos
+  const errors = {};
+  
+  if (!fecha_seguimiento) errors.fecha_seguimiento = ['El campo fecha_seguimiento es requerido'];
+  if (!observaciones) errors.observaciones = ['El campo observaciones es requerido'];
+  if (!id_adopcion) errors.id_adopcion = ['El campo id_adopcion es requerido'];
+  if (!id_usuario) errors.id_usuario = ['El campo id_usuario es requerido'];
+
+  if (Object.keys(errors).length > 0) {
+    return res.status(406).json({
+      type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1',
+      title: 'Uno o más errores de validación ocurrieron.',
+      status: 406,
+      detail: 'Por favor revise los errores',
+      datetime: new Date().toISOString(),
+      instance: req.originalUrl,
+      errors
+    });
+  }
+
+  const transaction = await sequelize.transaction();
+
+  try {
+    // Verificar que la adopción existe
+    const adopcionExistente = await adopcion.findByPk(id_adopcion, { transaction });
+    
+    if (!adopcionExistente) {
+      await transaction.rollback();
+      return res.status(406).json({
+        type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1',
+        title: 'Uno o más errores de validación ocurrieron.',
+        status: 406,
+        detail: 'La adopción no existe',
+        datetime: new Date().toISOString(),
+        instance: req.originalUrl,
+        errors: {
+          id_adopcion: ['La adopción especificada no existe']
+        }
+      });
+    }
+
+    // Crear el seguimiento
+    const nuevoSeguimiento = await seguimiento.create({
+      fecha_seguimiento,
+      observaciones,
+      date: new Date(),
+      inactive: 0,
+      id_adopcion
+    }, { transaction });
+
+    // Registrar en bitácora
+    await registrarBitacora({
+      tabla: 'seguimiento',
+      accion: 'INSERT',
+      datos: {
+        id: nuevoSeguimiento.id,
+        id_adopcion: nuevoSeguimiento.id_adopcion,
+        fecha_seguimiento: nuevoSeguimiento.fecha_seguimiento,
+        observaciones: nuevoSeguimiento.observaciones
+      },
+      id_usuario,
+      transaction
+    });
+
+    await transaction.commit();
+
+    res.status(201).json(nuevoSeguimiento);
+
+  } catch (e) {
+    await transaction.rollback();
+    
+    // Error genérico del servidor
+    res.status(500).json({
+      type: 'https://tools.ietf.org/html/rfc7231#section-6.6.1',
+      title: 'Ocurrió un error al procesar su solicitud.',
+      status: 500,
+      detail: e.message || 'Error interno del servidor',
+      datetime: new Date().toISOString(),
+      instance: req.originalUrl,
+      errors: {}
+    });
+  }
+};
+
+exports.createReturn = async (req, res, next) => {
+  const { fecha_de_retorno, observaciones, id_adopcion, id_usuario } = req.body;
+
+  // Validar campos requeridos
+  const errors = {};
+  
+  if (!fecha_de_retorno) errors.fecha_de_retorno = ['El campo fecha_de_retorno es requerido'];
+  if (!observaciones) errors.observaciones = ['El campo observaciones es requerido'];
+  if (!id_adopcion) errors.id_adopcion = ['El campo id_adopcion es requerido'];
+  if (!id_usuario) errors.id_usuario = ['El campo id_usuario es requerido'];
+
+  if (Object.keys(errors).length > 0) {
+    return res.status(406).json({
+      type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1',
+      title: 'Uno o más errores de validación ocurrieron.',
+      status: 406,
+      detail: 'Por favor revise los errores',
+      datetime: new Date().toISOString(),
+      instance: req.originalUrl,
+      errors
+    });
+  }
+
+  const transaction = await sequelize.transaction();
+
+  try {
+    // Verificar que la adopción existe
+    const adopcionExistente = await adopcion.findByPk(id_adopcion, { transaction });
+    
+    if (!adopcionExistente) {
+      await transaction.rollback();
+      return res.status(406).json({
+        type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1',
+        title: 'Uno o más errores de validación ocurrieron.',
+        status: 406,
+        detail: 'La adopción no existe',
+        datetime: new Date().toISOString(),
+        instance: req.originalUrl,
+        errors: {
+          id_adopcion: ['La adopción especificada no existe']
+        }
+      });
+    }
+
+    // Verificar que no exista ya un retorno para esta adopción
+    const retornoExistente = await retorno.findOne({
+      where: { id_adopcion },
+      transaction
+    });
+
+    if (retornoExistente) {
+      await transaction.rollback();
+      return res.status(406).json({
+        type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1',
+        title: 'Uno o más errores de validación ocurrieron.',
+        status: 406,
+        detail: 'La adopción ya tiene un retorno registrado',
+        datetime: new Date().toISOString(),
+        instance: req.originalUrl,
+        errors: {
+          id_adopcion: ['Esta adopción ya tiene un retorno registrado']
+        }
+      });
+    }
+
+    // Crear el retorno
+    const nuevoRetorno = await retorno.create({
+      fecha_de_retorno,
+      observaciones,
+      date: new Date(),
+      inactive: 0,
+      id_adopcion
+    }, { transaction });
+
+    // Actualizar el status de la adopción a 'Cancelada'
+    await adopcionExistente.update({ status: 'Cancelada' }, { transaction });
+
+    // Registrar en bitácora
+    await registrarBitacora({
+      tabla: 'retorno',
+      accion: 'INSERT',
+      datos: {
+        id: nuevoRetorno.id,
+        id_adopcion: nuevoRetorno.id_adopcion,
+        fecha_de_retorno: nuevoRetorno.fecha_de_retorno,
+        observaciones: nuevoRetorno.observaciones
+      },
+      id_usuario,
+      transaction
+    });
+
+    await transaction.commit();
+
+    res.status(201).json(nuevoRetorno);
+
+  } catch (e) {
+    await transaction.rollback();
+    
+    // Error genérico del servidor
+    res.status(500).json({
+      type: 'https://tools.ietf.org/html/rfc7231#section-6.6.1',
+      title: 'Ocurrió un error al procesar su solicitud.',
+      status: 500,
+      detail: e.message || 'Error interno del servidor',
+      datetime: new Date().toISOString(),
+      instance: req.originalUrl,
+      errors: {}
+    });
+  }
+};

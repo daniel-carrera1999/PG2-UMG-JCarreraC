@@ -61,7 +61,7 @@ public class AdoptionRequestManagementHttp
     {
         try
         {
-            var response = await _apiGetService.GetAsync($"adopcion/detalle_solicitud_management/{id}", "", 1, true);
+            var response = await _apiGetService.GetAsync($"adopcion/detalle_solicitud_management/{id}", "", 1, false);
 
 
             if (response.IsSuccessStatusCode)
@@ -86,6 +86,72 @@ public class AdoptionRequestManagementHttp
         }
 
         return new AdoptionRootResponse();
+    }
+
+    public async Task<bool> UpdateAdoptionRequestStatus(int id, UpdateAdoptionRequestStatusDTO dto)
+    {
+        try
+        {
+            var response = await _apiPutService.PutAsync($"adopcion/{id}/status", dto, 1, true);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                await _customDialogService.OpenViewErrorsAsync(response);
+            }
+        }
+        catch (Exception e)
+        {
+            await _customDialogService.OpenInternalErrorAsync(e);
+        }
+        return false;
+    }
+
+    public async Task<bool> AddAdopionFollowUp(AdoptionRequestFollowUpDTO dto)
+    {
+        try
+        {
+            var response = await _apiPostServie.PostAsync($"adopcion/seguimiento", dto, 1, true);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                await _customDialogService.OpenViewErrorsAsync(response);
+            }
+        }
+        catch (Exception e)
+        {
+            await _customDialogService.OpenInternalErrorAsync(e);
+        }
+        return false;
+    }
+
+    public async Task<bool> AddAdoptionReturn(AdoptionRequestReturnDTO dto)
+    {
+        try
+        {
+            var response = await _apiPostServie.PostAsync($"adopcion/retorno", dto, 1, true);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                await _customDialogService.OpenViewErrorsAsync(response);
+            }
+        }
+        catch (Exception e)
+        {
+            await _customDialogService.OpenInternalErrorAsync(e);
+        }
+        return false;
     }
 
 }

@@ -29,7 +29,7 @@ public class MyAdoptionRequestHttp
     {
         try
         {
-            var response = await _apiGetService.GetAsync($"adopcion/mis_solicitudes/{UserId}", "", 1, true);
+            var response = await _apiGetService.GetAsync($"adopcion/mis_solicitudes/{UserId}", "", 1, false);
 
 
             if (response.IsSuccessStatusCode)

@@ -8,5 +8,8 @@ router.get('/mis_solicitudes/:idUsuario', ctrl.listSolicitudesUsuario);
 router.get('/todas_solicitudes', ctrl.listTodasSolicitudes);
 router.get('/detalle_solicitud/:idAdopcion', ctrl.getDetalleAdopcion);
 router.get('/detalle_solicitud_management/:idAdopcion', ctrl.getDetalleAdopcionManagement);
+router.put('/:id/status', ctrl.updateStatus);
+router.post('/seguimiento', ctrl.createFollowUp);
+router.post('/retorno', ctrl.createReturn);
 
 module.exports = router;
