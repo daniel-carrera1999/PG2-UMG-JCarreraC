@@ -1,0 +1,24 @@
+﻿@page "/log"
+
+<SessionValidator title="Log del sistema" path="/log">
+	<Loader Loading="@loading" />
+
+    <div class="mb-3 d-flex justify-content-end">
+        <RadzenButton Icon="download" Text="Exportar CSV" ButtonStyle="ButtonStyle.Primary" Size="ButtonSize.Small" Click="@ExportToCsv" />
+    </div>
+
+    <RadzenDataGrid @ref="grid" Data="@logs" AllowPaging="true" PageSize="10" ColumnWidth="200px"
+                    AllowRowSelectOnRowClick="true" SelectionMode="DataGridSelectionMode.Single"
+                    FilterMode="FilterMode.CheckBoxList" AllowSorting="true" AllowFiltering="true"
+                    ApplyFilterText="Aplicar" ClearFilterText="Limpiar" EmptyText="No hay registros para mostrar">
+        <Columns>
+            <RadzenDataGridColumn Property="Id" Title="Id" Width="100px" />
+            <RadzenDataGridColumn Property="Table" Title="Tabla" />
+            <RadzenDataGridColumn Property="Action" Title="Acción" />
+            <RadzenDataGridColumn Property="Date" Title="Fecha" />
+            <RadzenDataGridColumn Property="Data" Title="Datos" />
+            <RadzenDataGridColumn Property="User.UserName" Title="Usuario" />
+        </Columns>
+    </RadzenDataGrid>
+
+</SessionValidator>
