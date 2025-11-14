@@ -133,6 +133,15 @@ public partial class AdoptionRequestManage
         }
     }
 
+    private async Task DownloadAdoptionRequestPdf()
+    {
+        loading = true;
+        await AdoptionRequestManagementHttp.GetAdoptionRequestDownloadAsync(data.Adoption!.Id);
+        loading = false;
+
+        StateHasChanged();
+    }
+
     private void Close()
     {
         DialogService.Close();

@@ -12,6 +12,9 @@ public class ApplicantResponseDTO
     [JsonPropertyName("apellidos")]
     public string? LastName { get; set; }
 
+    [JsonPropertyName("dpi")]
+    public string? Dpi { get; set; }
+
     [JsonPropertyName("fecha_nacimiento")]
     public DateOnly Birthdate { get; set; }
 
@@ -35,6 +38,9 @@ public class ApplicantResponseDTO
 
     [JsonPropertyName("ocupacion")]
     public string? Occupation { get; set; }
+
+    [JsonPropertyName("foto")]
+    public string? RequestPhoto { get; set; }
 
     [JsonPropertyName("id_usuario")]
     public int IdUser { get; set; }

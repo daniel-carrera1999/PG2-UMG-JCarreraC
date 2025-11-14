@@ -9,6 +9,9 @@ public class AdoptionRootResponse
     [JsonPropertyName("solicitante")]
     public ApplicantResponse? Applicant { get; set; }
 
+    [JsonPropertyName("referencias_personales")]
+    public List<PersonalReferenceResponse>? PersonalReferences { get; set; }
+
     [JsonPropertyName("mascota")]
     public MascotaResponse? Pet { get; set; }
 

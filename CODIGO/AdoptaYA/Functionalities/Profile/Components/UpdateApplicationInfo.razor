@@ -24,46 +24,52 @@
 
         <RadzenRow AlignItems="AlignItems.Center">
             <RadzenColumn Size="12" SizeMD="6">
+                <RadzenLabel Text="DPI *" Component="Dpi" />
+                <RadzenMask Mask="****-*****-****" CharacterPattern="[0-9]" Placeholder="0000-00000-0000" Name="Dpi" @bind-Value="applicationDTO.Dpi" Style="width: 100%;" aria-label="DPI" />
+                <ValidationMessage For="@(() => applicationDTO.Dpi)" class="rz-message rz-messages-error" />
+            </RadzenColumn>
+
+            <RadzenColumn Size="12" SizeMD="6">
                 <RadzenLabel Text="Fecha de Nacimiento *" Component="Birthdate" />
                 <RadzenDatePicker @bind-Value="applicationDTO.Birthdate" TValue="DateOnly?" DateFormat="dd/MM/yyyy" Name="Birthdate" Style="width: 100%;" />
                 <ValidationMessage For="@(() => applicationDTO.Birthdate)" class="rz-message rz-messages-error" />
             </RadzenColumn>
+        </RadzenRow>
 
+        <RadzenRow AlignItems="AlignItems.Center">
             <RadzenColumn Size="12" SizeMD="6">
                 <RadzenLabel Text="Celular *" Component="CellNumber" />
                 <RadzenTextBox @bind-Value="applicationDTO.CellPhone" Style="width: 100%;" Name="CellNumber" />
                 <ValidationMessage For="@(() => applicationDTO.CellPhone)" class="rz-message rz-messages-error" />
             </RadzenColumn>
-        </RadzenRow>
 
-        <RadzenRow AlignItems="AlignItems.Center">
             <RadzenColumn Size="12" SizeMD="6">
                 <RadzenLabel Text="Teléfono de Casa" Component="HomePhone" />
                 <RadzenTextBox @bind-Value="applicationDTO.HomePhone" Style="width: 100%;" Name="HomePhone" />
             </RadzenColumn>
+        </RadzenRow>
 
+        <RadzenRow AlignItems="AlignItems.Center">
             <RadzenColumn Size="12" SizeMD="6">
                 <RadzenLabel Text="Correo Electrónico *" Component="Email" />
                 <RadzenTextBox @bind-Value="applicationDTO.Email" Style="width: 100%;" Name="Email" Disabled="true" />
                 <ValidationMessage For="@(() => applicationDTO.Email)" class="rz-message rz-messages-error" />
             </RadzenColumn>
-        </RadzenRow>
 
-        <RadzenRow AlignItems="AlignItems.Center">
             <RadzenColumn Size="12" SizeMD="6">
                 <RadzenLabel Text="Dirección *" Component="Address" />
                 <RadzenTextArea @bind-Value="applicationDTO.Address" Rows="3" Style="width: 100%;" Name="Address" />
                 <ValidationMessage For="@(() => applicationDTO.Address)" class="rz-message rz-messages-error" />
             </RadzenColumn>
+        </RadzenRow>
 
+        <RadzenRow AlignItems="AlignItems.Center">
             <RadzenColumn Size="12" SizeMD="6">
                 <RadzenLabel Text="Ingresos Mensuales *" Component="MonthlyIncome" />
                 <RadzenNumeric @bind-Value="applicationDTO.MonthlyIncome" Style="width: 100%;" Name="MonthlyIncome" TValue="double?" ShowUpDown="false" />
                 <ValidationMessage For="@(() => applicationDTO.MonthlyIncome)" class="rz-message rz-messages-error" />
             </RadzenColumn>
-        </RadzenRow>
 
-        <RadzenRow AlignItems="AlignItems.Center">
             <RadzenColumn Size="12" SizeMD="6">
                 <RadzenLabel Text="Estado Civil" Component="MaritalStatus" />
                 <RadzenDropDown @bind-Value="applicationDTO.MaritalStatus"
@@ -73,10 +79,19 @@
                                 Placeholder="Seleccione un estado civil"
                                 AllowClear="true" />
             </RadzenColumn>
+        </RadzenRow>
 
+        <RadzenRow AlignItems="AlignItems.Center">
             <RadzenColumn Size="12" SizeMD="6">
                 <RadzenLabel Text="Ocupación" Component="Occupation" />
                 <RadzenTextBox @bind-Value="applicationDTO.Occupation" Style="width: 100%;" Name="Occupation" />
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeMD="6">
+                <RadzenLabel Text="Foto del solicitante" Component="Photo" />
+                <RadzenFileInput @bind-Value="applicationDTO.RequestPhoto" Accept="image/*" MaxFileSize="10485760" TValue="string"
+                                 Style="width: 100%; margin-top: 1px;" Name="MainPhoto" ChooseText="Seleccionar"
+                                 Change="@(args => OnFileChange(args))" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})" />
+                <ValidationMessage For="@(() => applicationDTO.RequestPhoto)" class="rz-message rz-messages-error" />
             </RadzenColumn>
         </RadzenRow>
 

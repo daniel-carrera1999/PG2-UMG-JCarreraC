@@ -12,6 +12,10 @@ public class ApplicantRequestDTO
     [JsonPropertyName("apellidos")]
     public string? LastName { get; set; }
 
+    [Required(ErrorMessage = "El número de identificación es obligatorio")]
+    [JsonPropertyName("dpi")]
+    public string? Dpi { get; set; }
+
     [Required(ErrorMessage = "La fecha de nacimiento es obligatoria")]
     [JsonPropertyName("fecha_nacimiento")]
     public DateOnly? Birthdate { get; set; }
@@ -40,6 +44,10 @@ public class ApplicantRequestDTO
 
     [JsonPropertyName("ocupacion")]
     public string? Occupation { get; set; }
+
+    [Required(ErrorMessage = "La foto del solicitante es obligatoria")]
+    [JsonPropertyName("foto")]
+    public string? RequestPhoto { get; set; }
 
     [JsonPropertyName("id_usuario")]
     public int IdUsuario { get; set; }

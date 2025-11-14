@@ -566,6 +566,13 @@ exports.getDetalleAdopcionManagement = async (req, res) => {
             {
               model: usuario,
               attributes: ['id', 'username', 'correo', 'nombre', 'apellido']
+            },
+            {
+              model: referencia_personal,
+              attributes: {
+                exclude: ['inactive', 'id_solicitante']
+              },
+              required: false
             }
           ]
         },
@@ -663,6 +670,13 @@ exports.getDetalleAdopcionManagement = async (req, res) => {
         date: adopcionJSON.solicitante?.date,
         usuario: adopcionJSON.solicitante?.usuario || null
       },
+      referencias_personales: adopcionJSON.solicitante?.referencia_personals?.map(ref => ({
+        id: ref.id,
+        nombre: ref.nombre,
+        telefono: ref.telefono,
+        vinculo: ref.vinculo,
+        date: ref.date
+      })) || [],
       mascota: {
         id: adopcionJSON.mascotum?.id,
         nombre_mascota: adopcionJSON.mascotum?.nombre_mascota,
@@ -1026,3 +1040,4 @@ exports.createReturn = async (req, res, next) => {
     });
   }
 };
+

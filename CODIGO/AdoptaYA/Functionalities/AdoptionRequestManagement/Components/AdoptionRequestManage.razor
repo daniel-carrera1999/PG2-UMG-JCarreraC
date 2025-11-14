@@ -360,8 +360,22 @@
         </RadzenColumn>
     </RadzenRow>
 
+    <RadzenRow>
+        <RadzenFieldset Text="Referencias personales del solicitante" class="fw-bold">
+            <RadzenDataGrid TItem="PersonalReferenceResponse" Data="@data?.PersonalReferences" EmptyText="No hay referencias registradas" 
+                            ShowPagingSummary="false" class="fw-normal" AllowPaging="false">
+                <Columns>
+                    <RadzenDataGridColumn TItem="PersonalReferenceResponse" Property="Id" Title="#" />
+                    <RadzenDataGridColumn TItem="PersonalReferenceResponse" Property="Name" Title="Nombre" />
+                    <RadzenDataGridColumn TItem="PersonalReferenceResponse" Property="CellPhone" Title="Teléfono" />
+                    <RadzenDataGridColumn TItem="PersonalReferenceResponse" Property="Relationship" Title="Vinculo" />
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenFieldset>
+    </RadzenRow>
+
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem">
-        <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat"
-                      Size="ButtonSize.Large" Icon="arrow_back" Text="Cerrar" Click="@Close" />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Large" Icon="arrow_back" Text="Cerrar" Click="@Close" />
+        <RadzenButton ButtonStyle="ButtonStyle.Primary" Variant="Variant.Flat" Size="ButtonSize.Large" Icon="picture_as_pdf" Text="Imprimir solicitud" Click="@DownloadAdoptionRequestPdf" />
     </RadzenStack>
 </RadzenStack>

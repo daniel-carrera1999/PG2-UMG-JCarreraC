@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const ctrl = require('../controllers/adopcion.controller');
+const pdfCtrl = require('../controllers/adopcionPdf.controller');
 
 router.get('/mascotas-disponibles', ctrl.listDisponibles);
 router.post('/adoptar', ctrl.create);
@@ -11,5 +12,7 @@ router.get('/detalle_solicitud_management/:idAdopcion', ctrl.getDetalleAdopcionM
 router.put('/:id/status', ctrl.updateStatus);
 router.post('/seguimiento', ctrl.createFollowUp);
 router.post('/retorno', ctrl.createReturn);
+
+router.get('/:idAdopcion/pdf', pdfCtrl.generarPDFAdopcion);
 
 module.exports = router;

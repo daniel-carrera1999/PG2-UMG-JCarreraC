@@ -5,6 +5,7 @@ module.exports = (sequelize) => {
     id:               { type: DataTypes.INTEGER.UNSIGNED, primaryKey: true, autoIncrement: true, allowNull: false },
     nombres:          { type: DataTypes.STRING(90), allowNull: true },
     apellidos:        { type: DataTypes.STRING(90), allowNull: true },
+    dpi:              { type: DataTypes.STRING(13), allowNull: true },
     fecha_nacimiento: { type: DataTypes.DATEONLY, allowNull: true },
     celular:          { type: DataTypes.STRING(75), allowNull: true },
     telefono_casa:    { type: DataTypes.STRING(75), allowNull: true },
@@ -13,6 +14,7 @@ module.exports = (sequelize) => {
     ingresos:         { type: DataTypes.DOUBLE, allowNull: true },
     estado_civil:     { type: DataTypes.STRING(45), allowNull: true },
     ocupacion:        { type: DataTypes.STRING(100), allowNull: true },
+    foto:             { type: DataTypes.TEXT('long'), allowNull: true },
     id_usuario:       { type: DataTypes.INTEGER.UNSIGNED, allowNull: true, unique: true },
     date:             { type: DataTypes.DATE, allowNull: true, defaultValue: DataTypes.NOW },
     inactive:         { type: DataTypes.TINYINT(1), allowNull: true, defaultValue: 0 }
@@ -23,6 +25,7 @@ module.exports = (sequelize) => {
 
   Solicitante.associate = (models) => {
     Solicitante.belongsTo(models.usuario, { foreignKey: 'id_usuario', onUpdate: 'CASCADE', onDelete: 'SET NULL' });
+    Solicitante.hasMany(models.referencia_personal, { foreignKey: 'id_solicitante', onUpdate: 'CASCADE' });
   };
 
   return Solicitante;

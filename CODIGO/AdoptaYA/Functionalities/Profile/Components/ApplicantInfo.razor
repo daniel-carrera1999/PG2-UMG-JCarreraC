@@ -1,71 +1,106 @@
 ﻿@using System.Globalization
 
-<RadzenText TextStyle="TextStyle.H5" class="fw-bold rz-mb-1">Perfil del Solicitante</RadzenText>
+<RadzenText TextStyle="TextStyle.H5" class="fw-bold rz-mb-4">Perfil del Solicitante</RadzenText>
 
-<RadzenRow>
-    <RadzenColumn Size="12" SizeMD="6">
-        <RadzenLabel Text="Nombre:" class="fw-bold" />
-        <RadzenText Text="@applicant.Name" />
-    </RadzenColumn>
-    <RadzenColumn Size="12" SizeMD="6">
-        <RadzenLabel Text="Apellido:" class="fw-bold" />
-        <RadzenText Text="@applicant.LastName" />
-    </RadzenColumn>
-</RadzenRow>
+<RadzenCard class="rz-mb-4">
+    <RadzenRow>
+        <RadzenColumn Size="12" SizeMD="3" class="text-center">
+            @if (!string.IsNullOrEmpty(applicant.RequestPhoto))
+            {
+                <img src="@applicant.RequestPhoto"
+                     alt="Foto del solicitante"
+                     style="width: 180px; height: 180px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" />
+            }
+            else
+            {
+                <div style="width: 180px; height: 180px; background-color: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                    <RadzenIcon Icon="person" Style="font-size: 80px; color: #ccc;" />
+                </div>
+            }
+        </RadzenColumn>
 
-<RadzenRow>
-    <RadzenColumn Size="12" SizeMD="6">
-        <RadzenLabel Text="Fecha de nacimiento:" class="fw-bold" />
-        <RadzenText Text="@(applicant.Birthdate.ToString("dd/MM/yyyy") ?? "Sin fecha")" />
-    </RadzenColumn>
-    <RadzenColumn Size="12" SizeMD="6">
-        <RadzenLabel Text="Correo electrónico:" class="fw-bold" />
-        <RadzenText Text="@applicant.Email" />
-    </RadzenColumn>
-</RadzenRow>
+        <RadzenColumn Size="12" SizeMD="9">
+            <RadzenRow class="rz-mb-3">
+                <RadzenColumn Size="12" SizeMD="6">
+                    <RadzenLabel Text="Nombre" class="fw-bold rz-mb-1" />
+                    <RadzenText Text="@applicant.Name" TextStyle="TextStyle.Body1" />
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="6">
+                    <RadzenLabel Text="Apellido" class="fw-bold rz-mb-1" />
+                    <RadzenText Text="@applicant.LastName" TextStyle="TextStyle.Body1" />
+                </RadzenColumn>
+            </RadzenRow>
 
-<RadzenRow>
-    <RadzenColumn Size="12" SizeMD="6">
-        <RadzenLabel Text="Celular:" class="fw-bold" />
-        <RadzenText Text="@applicant.CellNumber" />
-    </RadzenColumn>
-    <RadzenColumn Size="12" SizeMD="6">
-        <RadzenLabel Text="Teléfono de casa:" class="fw-bold" />
-        <RadzenText Text="@applicant.HomePhone" />
-    </RadzenColumn>
-</RadzenRow>
+            <RadzenRow class="rz-mb-3">
+                <RadzenColumn Size="12" SizeMD="6">
+                    <RadzenLabel Text="DPI" class="fw-bold rz-mb-1" />
+                    <RadzenText Text="@(applicant.Dpi?.Length == 13 ? $"{applicant.Dpi.Substring(0, 4)}-{applicant.Dpi.Substring(4, 5)}-{applicant.Dpi.Substring(9, 4)}" : applicant.Dpi)" TextStyle="TextStyle.Body1" />
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="6">
+                    <RadzenLabel Text="Fecha de nacimiento" class="fw-bold rz-mb-1" />
+                    <RadzenText Text="@(applicant.Birthdate.ToString("dd/MM/yyyy") ?? "Sin fecha")" TextStyle="TextStyle.Body1" />
+                </RadzenColumn>
+            </RadzenRow>
 
-<RadzenRow>
-    <RadzenColumn Size="12" SizeMD="6">
-        <RadzenLabel Text="Dirección:" class="fw-bold" />
-        <RadzenText Text="@applicant.Address" />
-    </RadzenColumn>
-    <RadzenColumn Size="12" SizeMD="6">
-        <RadzenLabel Text="Ocupación:" class="fw-bold" />
-        <RadzenText Text="@applicant.Occupation" />
-    </RadzenColumn>
-</RadzenRow>
+            <RadzenRow>
+                <RadzenColumn Size="12" SizeMD="6">
+                    <RadzenLabel Text="Estado" class="fw-bold rz-mb-1" />
+                    <div>
+                        <RadzenBadge Text="@(applicant.Inactive == 0 ? "Activo" : "Inactivo")"
+                                     BadgeStyle="@(applicant.Inactive == 0 ? BadgeStyle.Success : BadgeStyle.Danger)" />
+                    </div>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="6">
+                    <RadzenLabel Text="Fecha de registro" class="fw-bold rz-mb-1" />
+                    <RadzenText Text="@applicant.Date.ToString("dd/MM/yyyy")" TextStyle="TextStyle.Body1" />
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenCard>
 
-<RadzenRow>
-    <RadzenColumn Size="12" SizeMD="6">
-        <RadzenLabel Text="Estado civil:" class="fw-bold" />
-        <RadzenText Text="@applicant.MaritalStatus" />
-    </RadzenColumn>
-    <RadzenColumn Size="12" SizeMD="6">
-        <RadzenLabel Text="Ingresos mensuales:" class="fw-bold" />
-        <RadzenText Text="@applicant.MonthlyIncome.ToString("C", new CultureInfo("es-GT"))" />
-    </RadzenColumn>
-</RadzenRow>
+<RadzenText TextStyle="TextStyle.H6" class="fw-bold">Información de Contacto</RadzenText>
+<RadzenCard class="rz-mb-4">
+    <RadzenRow class="rz-mb-3">
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenLabel Text="Correo electrónico" class="fw-bold rz-mb-1" />
+            <RadzenText Text="@applicant.Email" TextStyle="TextStyle.Body1" />
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenLabel Text="Celular" class="fw-bold rz-mb-1" />
+            <RadzenText Text="@applicant.CellNumber" TextStyle="TextStyle.Body1" />
+        </RadzenColumn>
+    </RadzenRow>
 
-<RadzenRow>
-    <RadzenColumn Size="12" SizeMD="6">
-        <RadzenLabel Text="Fecha de registro:" class="fw-bold" />
-        <RadzenText Text="@applicant.Date.ToString("dd/MM/yyyy")" />
-    </RadzenColumn>
-    <RadzenColumn Size="12" SizeMD="6">
-        <RadzenLabel Text="Estado:" class="fw-bold" />
-        <br />
-        <RadzenBadge Text="@(applicant.Inactive == 0 ? "Activo" : "Inactivo")"
-                     BadgeStyle="@(applicant.Inactive == 0 ? BadgeStyle.Success : BadgeStyle.Danger)" />
-    </RadzenColumn>
-</RadzenRow>
+    <RadzenRow class="rz-mb-3">
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenLabel Text="Teléfono de casa" class="fw-bold rz-mb-1" />
+            <RadzenText Text="@(string.IsNullOrEmpty(applicant.HomePhone) ? "No proporcionado" : applicant.HomePhone)" TextStyle="TextStyle.Body1" />
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenLabel Text="Dirección" class="fw-bold rz-mb-1" />
+            <RadzenText Text="@applicant.Address" TextStyle="TextStyle.Body1" />
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenCard>
+
+<RadzenText TextStyle="TextStyle.H6" class="fw-bold">Información Personal y Económica</RadzenText>
+<RadzenCard>
+    <RadzenRow class="rz-mb-3">
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenLabel Text="Ocupación" class="fw-bold rz-mb-1" />
+            <RadzenText Text="@(string.IsNullOrEmpty(applicant.Occupation) ? "No especificado" : applicant.Occupation)" TextStyle="TextStyle.Body1" />
+        </RadzenColumn>
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenLabel Text="Estado civil" class="fw-bold rz-mb-1" />
+            <RadzenText Text="@(string.IsNullOrEmpty(applicant.MaritalStatus) ? "No especificado" : applicant.MaritalStatus)" TextStyle="TextStyle.Body1" />
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenRow>
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenLabel Text="Ingresos mensuales" class="fw-bold rz-mb-1" />
+            <RadzenText Text="@applicant.MonthlyIncome.ToString("C", new CultureInfo("es-GT"))" TextStyle="TextStyle.Body1" />
+        </RadzenColumn>
+    </RadzenRow>
+</RadzenCard>
